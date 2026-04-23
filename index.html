@@ -1,0 +1,1876 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>皖南民居</title>
+  <style>
+    :root {
+      --ink: #1d242a;
+      --paper: #f4f6f7;
+      --earth: #4d5966;
+      --verm: #2d3946;
+      --gold: #8ea0ae;
+      --pine: #56697a;
+      --mist: #d7dde2;
+      --card: rgba(255, 255, 255, 0.92);
+      --line: rgba(45, 57, 70, 0.16);
+      --water: #a5c2d7;
+      --water-deep: #7fa2ba;
+      --wall: #f6f8fb;
+      --roof: #3d4f61;
+      --accent: #c36a4a;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Songti SC", "Noto Serif SC", "Source Han Serif SC", serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 12%, rgba(142, 160, 174, 0.28), transparent 40%),
+        radial-gradient(circle at 88% 88%, rgba(77, 89, 102, 0.2), transparent 38%),
+        linear-gradient(160deg, #eff3f5 0%, #f9fbfc 52%, #e9eff2 100%);
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    .pattern {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.28;
+      background-image:
+        linear-gradient(45deg, rgba(77, 89, 102, 0.05) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(86, 105, 122, 0.04) 25%, transparent 25%);
+      background-size: 42px 42px;
+      z-index: -1;
+    }
+
+    .side-ornament {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 104px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.9;
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      background-position: center;
+    }
+
+    .side-ornament.left {
+      left: 8px;
+      background-image: url("assets/images/side_left.jpg");
+      -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 64%, rgba(0, 0, 0, 0));
+      mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 64%, rgba(0, 0, 0, 0));
+    }
+
+    .side-ornament.right {
+      right: 8px;
+      background-image: url("assets/images/side_right.jpg");
+      -webkit-mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 64%, rgba(0, 0, 0, 0));
+      mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 64%, rgba(0, 0, 0, 0));
+    }
+
+    .hero-cover {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: auto;
+      overflow: visible;
+      background: transparent;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .hero-cover-image {
+      width: 100vw;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      transform: translateY(-100%);
+      opacity: 0;
+      animation: coverInOut 2.4s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+    }
+
+    .hero-poem {
+      position: absolute;
+      top: 10px;
+      right: 24px;
+      width: auto;
+      height: min(42vh, 320px);
+      object-fit: contain;
+      opacity: 0;
+      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.22));
+      transform: translateY(-60%);
+      animation: poemInOut 2.4s ease forwards;
+      pointer-events: none;
+    }
+
+    .container {
+      width: min(1180px, 92vw);
+      margin: 0 auto;
+    }
+
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 18;
+      background: rgba(246, 248, 251, 0.86);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(45, 57, 70, 0.14);
+    }
+
+    .top-nav-inner {
+      width: min(1180px, 92vw);
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px 0;
+    }
+
+    .top-nav-link {
+      text-decoration: none;
+      color: var(--ink);
+      border: 1px solid rgba(45, 57, 70, 0.18);
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 0.9rem;
+      background: rgba(255, 255, 255, 0.85);
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .top-nav-link:hover {
+      transform: translateY(-1px);
+      border-color: rgba(195, 106, 74, 0.55);
+      background: rgba(195, 106, 74, 0.08);
+    }
+
+    header {
+      padding: 10px 0 28px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 4vw, 4rem);
+      line-height: 1.15;
+      letter-spacing: 0.04em;
+      font-family: "STKaiti", "KaiTi", "BiauKai", serif;
+    }
+
+    .subtitle {
+      margin: 16px 0 0;
+      max-width: 720px;
+      font-size: clamp(1.02rem, 1.8vw, 1.24rem);
+      color: rgba(31, 36, 42, 0.82);
+    }
+
+    .map-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 0.9fr;
+      gap: 18px;
+      align-items: start;
+      padding-bottom: 50px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .map-card,
+    .detail-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 18px 34px rgba(36, 50, 64, 0.12);
+      overflow: hidden;
+    }
+
+    .map-card {
+      padding: 16px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .map-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .map-title {
+      font-size: 1.34rem;
+      font-family: "STKaiti", "KaiTi", serif;
+      margin: 0;
+    }
+
+    .map-legend {
+      display: flex;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: rgba(29, 36, 42, 0.7);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .map-stage {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      border-radius: 18px;
+      background-color: #ffffff;
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      overflow: hidden;
+      border: 1px solid transparent;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 260ms ease, transform 260ms ease;
+    }
+
+    .map-stage.fade {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    .map-stage.cover {
+      background-size: cover;
+      background-position: center 30%;
+    }
+
+    .map-stage svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .village-honor {
+      margin-top: 10px;
+      border: 1px solid rgba(45, 57, 70, 0.16);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 12px;
+      font-size: 0.92rem;
+      color: rgba(29, 36, 42, 0.84);
+    }
+
+    .village-honor strong {
+      color: var(--verm);
+      margin-right: 6px;
+    }
+
+    .pin-row {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .map-pin {
+      position: relative;
+      transform: none;
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(36, 50, 64, 0.2);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 8px 18px rgba(36, 50, 64, 0.16);
+      cursor: pointer;
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+
+    .map-pin::after {
+      content: none;
+    }
+
+    .map-pin span {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--verm);
+    }
+
+    .map-pin:hover {
+      transform: scale(1.08);
+      border-color: rgba(195, 106, 74, 0.7);
+      box-shadow: 0 16px 28px rgba(36, 50, 64, 0.28);
+      z-index: 3;
+    }
+
+    .map-pin.active {
+      background: rgba(195, 106, 74, 0.16);
+      border-color: rgba(195, 106, 74, 0.7);
+    }
+
+    .detail-card {
+      padding: 20px;
+      min-height: 420px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 260ms ease, transform 260ms ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .detail-card.fade {
+      opacity: 0;
+      transform: translateX(-54px);
+    }
+
+    .detail-title {
+      margin: 0;
+      font-size: 1.6rem;
+      font-family: "STKaiti", "KaiTi", serif;
+    }
+
+    .detail-sub {
+      margin: 0;
+      color: rgba(29, 36, 42, 0.7);
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .detail-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .detail-tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(77, 89, 102, 0.26);
+      font-size: 0.86rem;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .detail-text {
+      margin: 0;
+      color: rgba(29, 36, 42, 0.85);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .detail-item {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(45, 57, 70, 0.14);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.92rem;
+    }
+
+    .detail-item strong {
+      color: var(--verm);
+    }
+
+    .detail-divider {
+      height: 1px;
+      background: rgba(45, 57, 70, 0.12);
+      margin: 4px 0;
+    }
+
+    .map-hint {
+      font-size: 0.88rem;
+      color: rgba(29, 36, 42, 0.7);
+      margin-top: 12px;
+    }
+
+    .module-section {
+      margin-top: 28px;
+      padding-bottom: 56px;
+    }
+
+    .module-title {
+      margin: 0 0 12px;
+      font-size: 1.74rem;
+      font-family: "STKaiti", "KaiTi", serif;
+    }
+
+    .module-subtitle {
+      margin: 0 0 14px;
+      color: rgba(29, 36, 42, 0.7);
+      font-size: 0.98rem;
+    }
+
+    .module-layout {
+      display: grid;
+      grid-template-columns: 168px 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .module-list,
+    .module-detail {
+      height: 100%;
+    }
+
+    .module-list,
+    .module-detail {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 18px 32px rgba(36, 50, 64, 0.1);
+      padding: 16px;
+    }
+
+    .module-detail.fade {
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 560ms cubic-bezier(0.22, 0.61, 0.36, 1), transform 560ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    .module-list {
+      display: grid;
+      gap: 18px;
+      justify-items: stretch;
+    }
+
+    .module-btn {
+      appearance: none;
+      border: 1px solid rgba(45, 57, 70, 0.18);
+      border-radius: 12px;
+      padding: 11px 8px;
+      background: rgba(255, 255, 255, 0.92);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1.08rem;
+      font-weight: 600;
+      text-align: left;
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease, background 180ms ease;
+    }
+
+    .module-btn:hover {
+      transform: scale(1.12);
+      border-color: rgba(195, 106, 74, 0.45);
+      box-shadow: 0 10px 20px rgba(36, 50, 64, 0.14);
+    }
+
+    .module-btn.active {
+      border-color: rgba(195, 106, 74, 0.7);
+      background: rgba(195, 106, 74, 0.12);
+      animation: modulePulse 900ms ease;
+    }
+
+    .module-btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 6px 14px rgba(36, 50, 64, 0.18);
+    }
+
+
+    .module-detail h3 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-family: "STKaiti", "KaiTi", serif;
+    }
+
+    .module-detail p {
+      margin: 6px 0 0;
+      color: rgba(29, 36, 42, 0.8);
+    }
+
+    .module-meta {
+      margin-top: 10px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .meta-item {
+      border: 1px solid rgba(45, 57, 70, 0.14);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.88);
+      font-size: 0.92rem;
+    }
+
+    .meta-item strong {
+      color: var(--verm);
+    }
+
+    .file-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .file-card {
+      border: 1px dashed rgba(45, 57, 70, 0.2);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.86);
+      font-size: 0.92rem;
+    }
+
+    .file-card img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .file-card.image {
+      padding: 8px;
+      display: grid;
+      gap: 6px;
+      overflow: hidden;
+    }
+
+    .file-card.image img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .file-card.image img.wide-view {
+      width: 108%;
+      max-width: none;
+      margin-left: -4%;
+      object-position: center;
+    }
+
+    .file-card.image img.keep-right {
+      margin-left: -8%;
+      object-position: right center;
+    }
+
+    .file-card.image img.shift-left-sm {
+      margin-left: -6%;
+    }
+
+    .file-card {
+      min-height: 220px;
+    }
+
+    .art-section {
+      margin-top: 20px;
+      padding-bottom: 60px;
+    }
+
+    .art-title {
+      margin: 0 0 14px;
+      font-size: 1.56rem;
+      font-family: "STKaiti", "KaiTi", serif;
+    }
+
+    .art-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .art-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 12px 24px rgba(36, 50, 64, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transform: scale(var(--card-scale, 0.9));
+      opacity: var(--card-opacity, 0.75);
+      transform-origin: center center;
+      transition: transform 220ms ease, opacity 220ms ease, box-shadow 220ms ease;
+      will-change: transform, opacity;
+    }
+
+    .art-card.is-center {
+      box-shadow: 0 16px 30px rgba(36, 50, 64, 0.16);
+    }
+
+    .art-photo {
+      height: 420px;
+      flex: 0 0 420px;
+      border-radius: 10px;
+      background: rgba(240, 245, 249, 0.9);
+      border: 1px dashed rgba(45, 57, 70, 0.2);
+      display: block;
+      color: rgba(29, 36, 42, 0.55);
+      font-size: 0.9rem;
+      overflow: hidden;
+      line-height: 0;
+    }
+
+    .art-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .art-name {
+      font-weight: 700;
+      font-size: 1.02rem;
+      color: var(--verm);
+    }
+
+    .art-meta {
+      font-size: 0.92rem;
+      color: rgba(29, 36, 42, 0.85);
+      line-height: 1.55;
+    }
+
+    .art-meta strong {
+      color: var(--verm);
+    }
+
+    .art-summary {
+      margin-top: 14px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      box-shadow: 0 10px 20px rgba(36, 50, 64, 0.08);
+      font-size: 0.92rem;
+      color: rgba(29, 36, 42, 0.9);
+      line-height: 1.65;
+    }
+
+    .art-summary div + div {
+      margin-top: 6px;
+    }
+
+    .art-summary strong {
+      color: var(--verm);
+    }
+
+    .water-section {
+      margin-top: 26px;
+      padding-bottom: 64px;
+    }
+
+    .water-title {
+      margin: 0 0 12px;
+      font-size: 1.58rem;
+      font-family: "STKaiti", "KaiTi", serif;
+    }
+
+    .water-summary {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 12px 24px rgba(36, 50, 64, 0.1);
+      color: rgba(29, 36, 42, 0.9);
+    }
+
+    .water-map {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 12px 24px rgba(36, 50, 64, 0.1);
+      position: sticky;
+      top: 14px;
+    }
+
+    .water-map-title {
+      margin: 0 0 10px;
+      font-size: 1.08rem;
+      font-family: "STKaiti", "KaiTi", serif;
+    }
+
+    .water-map-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .water-map-item {
+      border: 1px solid rgba(45, 57, 70, 0.14);
+      border-radius: 10px;
+      padding: 7px 9px;
+      background: rgba(255, 255, 255, 0.86);
+      font-size: 0.88rem;
+      transition: transform 360ms cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 360ms cubic-bezier(0.22, 0.61, 0.36, 1), border-color 360ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 360ms cubic-bezier(0.22, 0.61, 0.36, 1), background 360ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    .water-interaction {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .water-map-item[data-water-target] {
+      cursor: pointer;
+    }
+
+    .water-map-item[data-water-target]:hover {
+      transform: translateY(-2px);
+      border-color: rgba(195, 106, 74, 0.55);
+      box-shadow: 0 8px 16px rgba(36, 50, 64, 0.12);
+    }
+
+    .water-map-item.active {
+      border-color: rgba(195, 106, 74, 0.8);
+      background: rgba(195, 106, 74, 0.12);
+    }
+
+    .water-nodes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 0;
+    }
+
+    .water-node {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 10px 20px rgba(36, 50, 64, 0.08);
+      display: grid;
+      gap: 6px;
+      transform: scale(1);
+      opacity: 1;
+      transition: transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 520ms cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 520ms cubic-bezier(0.22, 0.61, 0.36, 1), border-color 520ms cubic-bezier(0.22, 0.61, 0.36, 1);
+      transform-origin: center center;
+    }
+
+    .water-node.inactive {
+      transform: scale(0.9);
+      opacity: 0.42;
+    }
+
+    .water-node.active {
+      transform: scale(1.045);
+      border-color: rgba(195, 106, 74, 0.6);
+      box-shadow: 0 18px 30px rgba(36, 50, 64, 0.2);
+    }
+
+    .water-node.jump-in {
+      animation: waterNodeJump 760ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    .water-node h3 {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--verm);
+    }
+
+    .water-node-photo {
+      width: 100%;
+      height: 180px;
+      border-radius: 10px;
+      object-fit: cover;
+      display: block;
+      border: 1px solid rgba(45, 57, 70, 0.14);
+      margin-bottom: 2px;
+    }
+
+    .water-node p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: rgba(29, 36, 42, 0.9);
+    }
+
+    .water-node strong {
+      color: var(--verm);
+    }
+
+    .water-node.side-image {
+      grid-template-columns: minmax(0, 1fr) 460px;
+      align-items: start;
+      column-gap: 12px;
+      grid-column: 1 / -1;
+      width: 100%;
+      justify-self: stretch;
+    }
+
+    .water-node.side-image .water-node-content {
+      display: grid;
+      gap: 6px;
+    }
+
+    .water-node-photo.side {
+      width: 220px;
+      height: 220px;
+      justify-self: end;
+      margin-bottom: 0;
+    }
+
+    .water-node-photo-stack {
+      display: grid;
+      grid-template-columns: repeat(2, 220px);
+      gap: 8px;
+      justify-self: end;
+    }
+
+    .compare-section {
+      margin-top: 26px;
+      padding-bottom: 70px;
+    }
+
+    .compare-title {
+      margin: 0 0 10px;
+      font-size: 1.58rem;
+      font-family: "STKaiti", "KaiTi", serif;
+    }
+
+    .compare-subtitle {
+      margin: 0 0 12px;
+      color: rgba(29, 36, 42, 0.75);
+      font-size: 0.94rem;
+    }
+
+    .compare-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .compare-dim-btn {
+      appearance: none;
+      border: 1px solid rgba(45, 57, 70, 0.18);
+      border-radius: 999px;
+      padding: 7px 12px;
+      background: rgba(255, 255, 255, 0.9);
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .compare-dim-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(195, 106, 74, 0.5);
+    }
+
+    .compare-dim-btn.active {
+      border-color: rgba(195, 106, 74, 0.72);
+      background: rgba(195, 106, 74, 0.12);
+      color: var(--verm);
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .compare-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 10px 20px rgba(36, 50, 64, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      transition: transform 260ms ease, opacity 260ms ease, box-shadow 260ms ease;
+    }
+
+    .compare-grid.switching .compare-card {
+      transform: translateY(8px) scale(0.98);
+      opacity: 0.38;
+      box-shadow: 0 4px 10px rgba(36, 50, 64, 0.06);
+    }
+
+    .compare-card.pop-in {
+      animation: comparePop 420ms ease;
+    }
+
+    .compare-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.04rem;
+      color: var(--verm);
+    }
+
+    .compare-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: rgba(29, 36, 42, 0.9);
+    }
+
+    .compare-photo {
+      width: 100%;
+      height: 210px;
+      flex: 0 0 210px;
+      border-radius: 10px;
+      border: 1px dashed rgba(45, 57, 70, 0.2);
+      background: rgba(255, 255, 255, 0.82);
+      display: block;
+      color: rgba(29, 36, 42, 0.58);
+      font-size: 0.88rem;
+      margin-bottom: 0;
+      overflow: hidden;
+      line-height: normal;
+    }
+
+    .compare-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .compare-photo.tall-photo {
+      height: 240px;
+      background: rgba(238, 242, 245, 0.9);
+    }
+
+    .compare-meta {
+      margin-top: 8px;
+      display: grid;
+      gap: 6px;
+      font-size: 0.88rem;
+      color: rgba(29, 36, 42, 0.9);
+    }
+
+    .compare-meta div {
+      border: 1px solid rgba(45, 57, 70, 0.12);
+      border-radius: 10px;
+      padding: 7px 9px;
+      background: rgba(255, 255, 255, 0.86);
+      line-height: 1.5;
+    }
+
+    .compare-meta strong {
+      color: var(--verm);
+    }
+
+    .compare-diff {
+      margin-top: 12px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(45, 57, 70, 0.15);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      color: rgba(29, 36, 42, 0.9);
+    }
+
+    .compare-diff strong {
+      color: var(--verm);
+    }
+
+    .compare-common {
+      margin-top: 10px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(45, 57, 70, 0.14);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      color: rgba(29, 36, 42, 0.9);
+    }
+
+    .compare-common strong {
+      color: var(--verm);
+    }
+
+
+    footer {
+      padding: 24px 0 38px;
+      text-align: center;
+      color: rgba(31, 36, 42, 0.66);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 980px) {
+      .map-layout {
+        grid-template-columns: 1fr;
+      }
+      .detail-card {
+        min-height: 0;
+      }
+      .module-layout {
+        grid-template-columns: 1fr;
+      }
+      .art-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .water-nodes {
+        grid-template-columns: 1fr;
+      }
+      .water-interaction {
+        grid-template-columns: 1fr;
+      }
+      .water-map {
+        position: relative;
+        top: 0;
+      }
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+      .water-node.side-image {
+        grid-template-columns: 1fr;
+      }
+      .water-node-photo.side {
+        width: 100%;
+        height: 200px;
+      }
+      .water-node-photo-stack {
+        justify-self: stretch;
+      }
+    }
+
+    @media (max-width: 640px) {
+      header { padding-top: 46px; }
+      .top-nav-inner {
+        gap: 6px;
+      }
+      .top-nav-link {
+        font-size: 0.82rem;
+        padding: 4px 9px;
+      }
+      .hero-poem {
+        right: 8px;
+        top: 8px;
+        height: min(28vh, 170px);
+      }
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+      .pin-row {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .map-pin {
+        height: 40px;
+      }
+      .map-pin span {
+        font-size: 0.88rem;
+      }
+      .file-grid {
+        grid-template-columns: 1fr;
+      }
+      .art-grid {
+        grid-template-columns: 1fr;
+      }
+      .water-map-grid {
+        grid-template-columns: 1fr;
+      }
+      .side-ornament {
+        opacity: 0.5;
+        width: 64px;
+      }
+      .side-ornament.left { left: 2px; }
+      .side-ornament.right { right: 2px; }
+    }
+
+    @keyframes modulePulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 rgba(195, 106, 74, 0.0); }
+      45% { transform: scale(1.06); box-shadow: 0 12px 24px rgba(195, 106, 74, 0.25); }
+      100% { transform: scale(1); box-shadow: 0 8px 18px rgba(36, 50, 64, 0.16); }
+    }
+
+    @keyframes waterNodeJump {
+      0% { transform: scale(0.96); }
+      55% { transform: scale(1.03); }
+      100% { transform: scale(1.02); }
+    }
+
+    @keyframes comparePop {
+      0% { transform: translateY(10px) scale(0.97); opacity: 0.35; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    @keyframes coverInOut {
+      0% { transform: translateY(-100%); opacity: 0; }
+      20% { transform: translateY(0); opacity: 1; }
+      62% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100%); opacity: 0; }
+    }
+
+    @keyframes poemInOut {
+      0% { transform: translateY(-60%); opacity: 0; }
+      20% { transform: translateY(0); opacity: 1; }
+      62% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-70%); opacity: 0; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="pattern" aria-hidden="true"></div>
+  <div class="side-ornament left" aria-hidden="true"></div>
+  <div class="side-ornament right" aria-hidden="true"></div>
+
+  <section class="hero-cover" aria-label="封面">
+    <img class="hero-cover-image" src="assets/images/cover.jpg" alt="皖南民居封面图">
+    <img class="hero-poem" src="assets/images/poem.png" alt="诗句题字">
+  </section>
+
+  <nav class="top-nav" aria-label="模块导航">
+    <div class="top-nav-inner">
+      <a class="top-nav-link" href="#section-village">典型村落</a>
+      <a class="top-nav-link" href="#section-structure">结构拆解</a>
+      <a class="top-nav-link" href="#section-art">三雕艺术</a>
+      <a class="top-nav-link" href="#section-water">宏村水系</a>
+      <a class="top-nav-link" href="#section-compare">民居对比</a>
+    </div>
+  </nav>
+
+  <header class="container">
+    <h1>皖南民居</h1>
+  </header>
+
+  <main class="container">
+    <section class="map-layout" id="section-village">
+      <div class="map-card">
+        <div class="map-header">
+          <h2 class="map-title">典型村落代表</h2>
+          <div class="map-legend"><span class="legend-dot"></span>点击村落查看详情</div>
+        </div>
+        <div class="map-stage" id="mapStage" aria-label="皖南村落地图">
+          <svg viewBox="0 0 1000 620" role="presentation" aria-hidden="true"></svg>
+        </div>
+        <div class="village-honor" id="villageHonor">
+          <strong>价值荣誉：</strong>
+          <span id="villageHonorText">请填写西递价值荣誉</span>
+        </div>
+        <div class="pin-row" aria-label="村落选择">
+          <button class="map-pin active" data-village="xidi" aria-label="西递">
+            <span>西递</span>
+          </button>
+          <button class="map-pin" data-village="hongcun" aria-label="宏村">
+            <span>宏村</span>
+          </button>
+          <button class="map-pin" data-village="chengkan" aria-label="呈坎">
+            <span>呈坎</span>
+          </button>
+          <button class="map-pin" data-village="nanping" aria-label="南屏">
+            <span>南屏</span>
+          </button>
+          <button class="map-pin" data-village="chaji" aria-label="查济">
+            <span>查济</span>
+          </button>
+          <button class="map-pin" data-village="tangyue" aria-label="棠樾">
+            <span>棠樾</span>
+          </button>
+        </div>
+        <p class="map-hint"></p>
+      </div>
+
+      <aside class="detail-card" id="detailCard">
+        <p class="detail-sub">当前村落</p>
+        <h3 class="detail-title" id="detailTitle">西递</h3>
+        <div class="detail-tags" id="detailTags">
+          <span class="detail-tag">北宋</span>
+          <span class="detail-tag">船形</span>
+          <span class="detail-tag">三进院落</span>
+        </div>
+        <p class="detail-text" id="detailText">
+          西递建村于北宋，以船形村落格局和三进院落著称。街巷尺度亲密，空间序列清晰，
+          体现徽州民居礼序与居住美学的平衡。
+        </p>
+        <div class="detail-grid" id="detailGrid">
+          <div class="detail-item"><strong>建村年代：</strong>北宋</div>
+          <div class="detail-item"><strong>格局特点：</strong>船形，三进院落</div>
+          <div class="detail-item"><strong>核心建筑：</strong>敬爱堂、追慕堂</div>
+          <div class="detail-item"><strong>空间气质：</strong>街巷紧凑、院落深进</div>
+        </div>
+        <div class="detail-divider" aria-hidden="true"></div>
+      </aside>
+    </section>
+
+    <section class="module-section" id="section-structure" aria-label="结构拆解">
+      <h2 class="module-title">结构拆解</h2>
+      <p class="module-subtitle">选择左侧构件，查看对应的实拍图与拆解示意图</p>
+      <div class="module-layout">
+        <div class="module-list" id="moduleList">
+          <button class="module-btn active" data-module="matouqiang">马头墙</button>
+          <button class="module-btn" data-module="tianjing">天井</button>
+          <button class="module-btn" data-module="chuandou">穿斗式<br>木构架</button>
+          <button class="module-btn" data-module="tailiang">抬梁式<br>木构架</button>
+          <button class="module-btn" data-module="tangwu">堂屋</button>
+          <button class="module-btn" data-module="menchuang">门窗隔扇</button>
+        </div>
+        <div class="module-detail" id="moduleDetail">
+          <div class="module-meta" id="moduleMeta">
+            <div class="meta-item" id="moduleName"><strong>构件名称：</strong>马头墙（也称封火山墙、叠落山墙）</div>
+            <div class="meta-item" id="moduleFunc"><strong>功能原理：</strong>1. 防火：高出屋面的墙体可阻断火势蔓延，避免连片民居火烧连营。<br>2. 防风：减少强风对屋面瓦件的破坏，增强建筑整体稳定性。<br>3. 排水：阶梯式坡面利于雨水快速排离，减少屋面渗漏。<br>4. 空间界定：形成高低错落的村落天际线，提升视觉层次与辨识度。</div>
+            <div class="meta-item" id="moduleCraft"><strong>营造工艺：</strong>1. 墙体主体以青砖错缝砌筑，灰浆饱满，坚固耐久。<br>2. 顶部呈阶梯状层层叠落，常见三叠、五叠、七叠，等级越高叠数越多。<br>3. 墙面抹白灰，顶部压顶线条流畅，檐角微微上翘，形似昂首马头。<br>4. 大户人家会在墙头做简单线脚、雕花，增强装饰性。</div>
+            <div class="meta-item" id="moduleCulture"><strong>文化寓意：</strong>1. 形似战马昂首，寓意“马到成功、仕途顺遂”。<br>2. 层层向上叠落，象征家族兴旺、步步高升。<br>3. 高低错落的形态也暗含风水“藏风聚气”的理念。</div>
+          </div>
+          <div class="file-grid">
+            <div class="file-card image" id="moduleReal">
+              <img id="moduleRealImg" src="assets/images/matouqiang_real.png" alt="马头墙实拍图">
+            </div>
+            <div class="file-card" id="moduleExplode"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="art-section" id="section-art" aria-label="三雕艺术墙">
+      <h2 class="art-title">三雕艺术墙</h2>
+      <div class="art-grid">
+        <article class="art-card">
+          <div class="art-photo"><img src="assets/images/art_wood_1.jpg?v=2" alt="木雕作品：渔樵耕读"></div>
+          <div class="art-name">木雕 · 渔樵耕读</div>
+          <div class="art-meta"><strong>雕种：</strong>木雕</div>
+          <div class="art-meta"><strong>典型位置：</strong>西递敬爱堂门窗隔扇、宏村承志堂厢房、南屏民居厅堂隔扇</div>
+          <div class="art-meta"><strong>图案内容：</strong>画面分为四组：渔夫垂钓、樵夫担柴、农夫犁田、书生伏案读书，配以山水、树木、云纹、山石，构图疏密得当，人物动态自然，场景完整连贯。</div>
+          <div class="art-meta"><strong>工艺技法：</strong>以透雕+深浮雕+线刻为主，多层镂空，层次可达3-5层，刀法圆润细腻，打磨光滑，保留木材本色，部分构件描金或彩绘。</div>
+          <div class="art-meta"><strong>文化寓意：</strong>体现“耕读传家”的核心价值观，农商并重、文武相济，表达对安稳、富足、知礼守义生活的追求。</div>
+        </article>
+
+        <article class="art-card">
+          <div class="art-photo"><img src="assets/images/art_wood_2.jpg?v=2" alt="木雕作品：松鹤延年"></div>
+          <div class="art-name">木雕 · 松鹤延年</div>
+          <div class="art-meta"><strong>雕种：</strong>木雕</div>
+          <div class="art-meta"><strong>典型位置：</strong>宏村承志堂梁垫、月梁、檐枋；西递履福堂正厅横梁</div>
+          <div class="art-meta"><strong>图案内容：</strong>苍松挺拔、仙鹤伫立或展翅，搭配灵芝、祥云、寿石、溪泉，构图对称饱满，气势庄重。</div>
+          <div class="art-meta"><strong>工艺技法：</strong>深浮雕为主，局部镂空，木料多用樟木、杉木，防虫耐腐，线条流畅有力。</div>
+          <div class="art-meta"><strong>文化寓意：</strong>松象征长青不老，鹤象征长寿祥瑞，整体寓意长寿安康、家运绵长。</div>
+        </article>
+
+        <article class="art-card">
+          <div class="art-photo"><img src="assets/images/art_brick_1.jpg?v=2" alt="砖雕作品：福禄寿喜"></div>
+          <div class="art-name">砖雕 · 福禄寿喜</div>
+          <div class="art-meta"><strong>雕种：</strong>砖雕</div>
+          <div class="art-meta"><strong>典型位置：</strong>西递、宏村普通民居门罩、门头上方</div>
+          <div class="art-meta"><strong>图案内容：</strong>蝙蝠（福）、梅花鹿（禄）、仙鹤（寿）、喜鹊（喜），搭配古钱纹、缠枝莲、祥云。</div>
+          <div class="art-meta"><strong>工艺技法：</strong>浅浮雕+线刻，青砖经水磨、精雕，线条简练干净，整体平整大气。</div>
+          <div class="art-meta"><strong>文化寓意：</strong>集福、禄、寿、喜四大吉祥寓意于一体，是徽州民居常见的吉祥纹样。</div>
+        </article>
+
+        <article class="art-card">
+          <div class="art-photo"><img src="assets/images/art_brick_2.jpg?v=2" alt="砖雕作品：八仙过海"></div>
+          <div class="art-name">砖雕 · 八仙过海</div>
+          <div class="art-meta"><strong>雕种：</strong>砖雕</div>
+          <div class="art-meta"><strong>典型位置：</strong>呈坎罗氏宗祠、宏村祠堂隔扇门窗</div>
+          <div class="art-meta"><strong>图案内容：</strong>汉钟离、吕洞宾、张果老、韩湘子、铁拐李、曹国舅、蓝采和、何仙姑八位仙人各执法器，衣袂飘飘，神态各异。</div>
+          <div class="art-meta"><strong>工艺技法：</strong>透雕+圆雕结合，人物比例准确，衣纹飘逸，细节精致入微。</div>
+          <div class="art-meta"><strong>文化寓意：</strong>辟邪驱灾、平安顺遂、超凡脱俗，寄托家族兴旺、远离灾祸的愿望。</div>
+        </article>
+
+        <article class="art-card">
+          <div class="art-photo"><img src="assets/images/art_stone_2.jpg?v=2" alt="石雕作品：狮子戏球"></div>
+          <div class="art-name">石雕 · 狮子戏球</div>
+          <div class="art-meta"><strong>雕种：</strong>石雕</div>
+          <div class="art-meta"><strong>典型位置：</strong>棠樾牌坊柱础、西递胡氏宗祠门墩、宏村祠堂入口</div>
+          <div class="art-meta"><strong>图案内容：</strong>石狮成对，雄狮戏球、雌狮抚幼狮，造型威严，肌肉饱满，神态生动。</div>
+          <div class="art-meta"><strong>工艺技法：</strong>圆雕+浅浮雕，石材选用青石、花岗岩，刀法刚劲有力，质感厚重。</div>
+          <div class="art-meta"><strong>文化寓意：</strong>镇宅辟邪、守护家宅、吉祥兴旺、权势尊严。</div>
+        </article>
+
+        <article class="art-card">
+          <div class="art-photo"><img src="assets/images/art_stone_1.jpg?v=2" alt="石雕作品：荷花漏窗"></div>
+          <div class="art-name">石雕 · 荷花漏窗</div>
+          <div class="art-meta"><strong>雕种：</strong>石雕</div>
+          <div class="art-meta"><strong>典型位置：</strong>宏村、西递民居院墙漏窗、天井花窗</div>
+          <div class="art-meta"><strong>图案内容：</strong>荷花、荷叶、莲蓬、藕节交错镂空，构图雅致简洁。</div>
+          <div class="art-meta"><strong>工艺技法：</strong>透雕+线刻，石材打磨光滑，镂空处棱角圆润。</div>
+          <div class="art-meta"><strong>文化寓意：</strong>“荷”通“和”，寓意家庭和睦、和和美美、清廉高洁。</div>
+        </article>
+      </div>
+      <div class="art-summary">
+        <div><strong>1. 艺术特点：</strong>题材吉祥、构图饱满、刀法精湛、因材施艺。</div>
+        <div><strong>2. 文化功能：</strong>装饰美化、教化育人、风水祈福、彰显身份。</div>
+        <div><strong>3. 非遗地位：</strong>徽州三雕为国家级非物质文化遗产，是皖南民居灵魂所在。</div>
+        <div><strong>4. 资料来源：</strong>安徽博物院、徽州文化博物馆、黄山市文旅局、非遗保护中心。</div>
+      </div>
+    </section>
+
+    <section class="water-section" id="section-water" aria-label="宏村水系动画">
+      <h2 class="water-title">宏村水系动画</h2>
+      <div class="water-summary">
+        宏村牛形人工水系始建于南宋绍兴元年，由汪氏先祖汪思齐、胡重等人依据传统风水理论规划修建，历经数代完善成型。水系以“牛”为整体形态，集生活用水、农业灌溉、消防灭火、村落景观、微气候调节与风水堪舆于一体，是宏村世界文化遗产价值的重要核心。
+      </div>
+
+      <div class="water-interaction">
+        <div class="water-map">
+          <h3 class="water-map-title">水系核心布局（牛形对应）</h3>
+          <div class="water-map-grid">
+            <div class="water-map-item" data-water-target="source"><strong>牛头：</strong>雷岗山</div>
+            <div class="water-map-item" data-water-target="source"><strong>牛角：</strong>村口两棵参天古树</div>
+            <div class="water-map-item" data-water-target="main"><strong>牛身：</strong>宏村民居建筑群</div>
+            <div class="water-map-item" data-water-target="main"><strong>牛肠：</strong>贯穿全村的人工水圳</div>
+            <div class="water-map-item" data-water-target="yuezao"><strong>牛胃：</strong>月沼</div>
+            <div class="water-map-item" data-water-target="nanhu"><strong>牛肚：</strong>南湖</div>
+            <div class="water-map-item" data-water-target="drainage"><strong>排水系统：</strong>地下暗沟与雨污分流</div>
+          </div>
+        </div>
+
+        <div class="water-nodes">
+        <article class="water-node" data-water-node="source">
+          <img class="water-node-photo" src="assets/images/water_source.jpg?v=2" alt="水圳源头实景">
+          <h3>水圳源头（西溪入口）</h3>
+          <p><strong>具体位置：</strong>宏村西北侧，源自黄山余脉羊栈岭山涧溪流。</p>
+          <p><strong>水流方向：</strong>自西北向东南，贯穿整个村落。</p>
+          <p><strong>核心功能：</strong>水源供给、水流调控、水质净化。</p>
+          <p><strong>营造特点：</strong>位于高处，依地势生态自流，无需人工动力。</p>
+        </article>
+
+        <article class="water-node" data-water-node="main">
+          <img class="water-node-photo" src="assets/images/water_main_canal.jpg?v=2" alt="主水圳实景">
+          <h3>主水圳（牛肠）</h3>
+          <p><strong>具体位置：</strong>沿宏村街巷蜿蜒，分流至家家户户门前。</p>
+          <p><strong>水流方向：</strong>自西北向东南，分支环绕民居院落。</p>
+          <p><strong>核心功能：</strong>生活用水、消防用水、降温调湿、灌溉用水。</p>
+          <p><strong>营造特点：</strong>宽约1米、深0.5-0.8米，青石砌筑、底铺鹅卵石，上游饮用下游洗涤。</p>
+        </article>
+
+        <article class="water-node" data-water-node="yuezao">
+          <img class="water-node-photo" src="assets/images/water_yuezao.jpg?v=2" alt="月沼实景">
+          <h3>月沼（牛胃）</h3>
+          <p><strong>具体位置：</strong>宏村中心，汪氏宗祠北侧。</p>
+          <p><strong>水流方向：</strong>主水圳汇入，蓄水后向南流出至南湖。</p>
+          <p><strong>核心功能：</strong>蓄水调流、生活核心、风水核心、消防储备。</p>
+          <p><strong>营造特点：</strong>半月形青石围砌，体现“月盈则亏、凡事有余”的徽州哲学。</p>
+        </article>
+
+        <article class="water-node" data-water-node="nanhu">
+          <img class="water-node-photo" src="assets/images/water_nanhu.jpg?v=2" alt="南湖实景">
+          <h3>南湖（牛肚）</h3>
+          <p><strong>具体位置：</strong>宏村南侧，村落末端。</p>
+          <p><strong>水流方向：</strong>月沼出水汇入南湖，多余水流外排农田。</p>
+          <p><strong>核心功能：</strong>总蓄水、灌溉、景观休闲、防洪排涝、生态净化。</p>
+          <p><strong>营造特点：</strong>弧形大水面，南湖书院与石拱桥相映，水利与人文景观高度融合。</p>
+        </article>
+
+        <article class="water-node side-image" data-water-node="drainage">
+          <div class="water-node-content">
+            <h3>地下排水系统</h3>
+            <p><strong>具体位置：</strong>街巷与民居天井下方，隐蔽式全程暗沟。</p>
+            <p><strong>水流方向：</strong>自北向南，与地表水同向，汇入南湖。</p>
+            <p><strong>核心功能：</strong>排污排水、防涝防潮、水质保护（雨污分流）。</p>
+            <p><strong>营造特点：</strong>青石砌筑，不占地面空间，数百年运行仍通畅。</p>
+          </div>
+          <div class="water-node-photo-stack">
+            <img class="water-node-photo side" src="assets/images/water_drainage.jpg?v=2" alt="地下排水系统示意图一">
+            <img class="water-node-photo side" src="assets/images/water_drainage_2.jpg?v=2" alt="地下排水系统示意图二">
+          </div>
+        </article>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="compare-section" id="section-compare" aria-label="模块五 民居对比卡片">
+      <h2 class="compare-title">民居对比卡片</h2>
+      <p class="compare-subtitle">点击上方维度，查看皖南民居、北京四合院、福建土楼在同一维度下的格局、营造、功能与文化差异，并结合代表建筑与地理分布进行横向理解。</p>
+
+      <div class="compare-toolbar" id="compareToolbar">
+        <button class="compare-dim-btn active" data-dim="layout">建筑格局</button>
+        <button class="compare-dim-btn" data-dim="space">空间形制</button>
+        <button class="compare-dim-btn" data-dim="material">结构材料</button>
+        <button class="compare-dim-btn" data-dim="function">功能特点</button>
+        <button class="compare-dim-btn" data-dim="decor">装饰艺术</button>
+        <button class="compare-dim-btn" data-dim="culture">文化内涵</button>
+      </div>
+
+      <div class="compare-grid" id="compareGrid">
+        <article class="compare-card" id="cardWannan">
+          <h3>皖南民居（安徽徽州）</h3>
+          <div class="compare-photo"><img src="assets/images/compare_wannan.jpg?v=2" alt="皖南民居示意图"></div>
+          <p id="compareWannanText"></p>
+          <div class="compare-meta">
+            <div><strong>代表：</strong><span id="compareWannanRep"></span></div>
+            <div><strong>地理分布：</strong><span id="compareWannanGeo"></span></div>
+          </div>
+        </article>
+        <article class="compare-card" id="cardSiheyuan">
+          <h3>北京四合院（华北地区）</h3>
+          <div class="compare-photo tall-photo"><img src="assets/images/compare_siheyuan.jpg?v=6" alt="北京四合院示意图"></div>
+          <p id="compareSiheyuanText"></p>
+          <div class="compare-meta">
+            <div><strong>代表：</strong><span id="compareSiheyuanRep"></span></div>
+            <div><strong>地理分布：</strong><span id="compareSiheyuanGeo"></span></div>
+          </div>
+        </article>
+        <article class="compare-card" id="cardTulou">
+          <h3>福建土楼（客家地区）</h3>
+          <div class="compare-photo tall-photo"><img src="assets/images/compare_tulou.jpg?v=6" alt="福建土楼示意图"></div>
+          <p id="compareTulouText"></p>
+          <div class="compare-meta">
+            <div><strong>代表：</strong><span id="compareTulouRep"></span></div>
+            <div><strong>地理分布：</strong><span id="compareTulouGeo"></span></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="compare-diff" id="compareDiff">
+        <strong>核心差异：</strong><span id="compareDiffText"></span>
+      </div>
+      <div class="compare-common">
+        <strong>共性特征：</strong><span id="compareCommonText"></span>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="container"></footer>
+
+  <script>
+    const data = {
+      xidi: {
+        title: "西递",
+        tags: ["北宋", "船形村落", "三进院落"],
+        honor: "2000年与宏村一同列入世界文化遗产名录，联合国教科文组织评价其“突出体现了人类居住与自然环境高度和谐的传统村落典范”，同时为全国重点文物保护单位、国家5A级旅游景区。",
+        text: "西递建村于北宋皇祐年间（公元1049—1054年），背靠石鼓山，三面环水，前临潘溪河，地处皖南徽州腹地，山水环绕，区位优越。拥有保存完整的徽派民居建筑群，以船形村落格局与三进院落著称。街巷尺度亲密，空间序列清晰，体现徽州民居礼序与居住美学的平衡。",
+        facts: [
+          "格局特点：整体呈船形村落，形似停泊于山水间的巨船。村内街巷以主街为骨架，呈鱼骨状放射分布，青石板铺路，地下排水系统完善，建筑沿轴线对称排布，布局严谨规整，是徽州传统村落布局的经典范例。",
+          "文化背景：西递为胡氏宗族聚居地，先祖为唐皇室后裔，北宋迁居至此。明清时期徽商鼎盛，族人经商致富后回乡营建宅院、祠堂、牌坊，逐步形成规模宏大的古村落。是徽州宗法制度与传统建筑文化的活态化石。",
+          "核心建筑：敬爱堂（胡氏宗祠，村落礼制核心）、追慕堂、履福堂（书香民居代表）、膺福堂、凌云阁、走马楼、胡文光刺史牌坊。",
+          "建筑特色：完好保存明清民居224幢、祠堂3座、牌坊1座，为典型徽派建筑风格，粉墙黛瓦马头墙，以天井为核心构建三进院落，工艺精湛，建筑细节深度融合徽州礼制与风水文化。"
+        ],
+        photo: "assets/images/xidi.png",
+        alt: "西递村"
+      },
+      hongcun: {
+        title: "宏村",
+        tags: ["南宋", "牛形村落"],
+        honor: "世界文化遗产、国家5A级旅游景区，被誉为“中国画里的乡村”，是中国传统村落人与自然和谐共生的杰出范例。",
+        text: "宏村建村于南宋绍兴元年（公元1131年），背倚黄山余脉羊栈岭、雷岗山，面朝南湖，山水环抱，是徽州风水村落的极致代表。",
+        facts: [
+          "格局特点：举世闻名的牛形人工水系村落，为中国古代村落规划与水利工程结合的巅峰。以山为牛头，树为牛角，民居为牛身，水圳为牛肠，月沼为牛胃，南湖为牛肚，四座古桥为牛腿，人工水系贯穿全村，构建“山—村—水—田”一体的完整风水格局，兼具实用功能与审美价值。",
+          "文化背景：汪氏宗族聚居地，由先祖按传统风水理论整体规划，历经数代完善成型。明清时期汇聚徽商巨贾，依托雄厚财力打造高规格建筑群，彰显天人合一、聚族而居、耕读传家的徽州文化精髓，是徽州人利用自然、改造自然的智慧结晶。",
+          "核心建筑：承志堂（被誉为“民间故宫”，徽派民居奢华典范）、月沼、南湖、南湖书院、汪氏宗祠、树人堂。",
+          "建筑特色：建筑枕山环水，户户临流、家家有水景，厅堂开阔，木雕装饰华丽繁复，水系兼具生活用水、消防、灌溉、景观、调节微气候多重功能，宜居性冠绝皖南古村落。"
+        ],
+        photo: "assets/images/hongcun.png",
+        alt: "宏村"
+      },
+      chengkan: {
+        title: "呈坎",
+        tags: ["东汉", "八卦风水村落"],
+        honor: "国家5A级旅游景区、全国重点文物保护单位、中国风水第一村。",
+        text: "呈坎建村于东汉建武年间（公元25—55年），地处黄山南麓，山水环绕，负阴抱阳，风水堪舆格局得天独厚。",
+        facts: [
+          "格局特点：按先天八卦+后天八卦双卦布局，村内二圳三街九十九巷，街巷纵横交错、曲折幽深如迷宫，是中国保存最完整、布局最精妙的八卦风水古村落，藏风聚气，宜居宜业。",
+          "文化背景：罗氏宗族千年古村，历史上文风鼎盛，有“一门三尚书，四代五进士”的美誉，是徽州科举文化、风水文化、宗族文化的核心代表，素有“中华第一八卦村”之称。",
+          "核心建筑：罗东舒祠（“江南第一祠”，徽州祠堂建筑巅峰）、燕来堂、环秀楼、文献祠。",
+          "建筑特色：祠堂规模宏大、规制严谨，石雕、砖雕等级极高，建筑形制严格遵循儒家礼制，融合风水与宗法文化，尽显徽州传统文化底蕴。"
+        ],
+        photo: "assets/images/chengkan.jpg",
+        alt: "呈坎"
+      },
+      nanping: {
+        title: "南屏",
+        tags: ["元", "迷宫式街巷格局"],
+        honor: "《菊豆》《卧虎藏龙》《徽娘宛心》等经典影视作品取景地，徽州知名影视古村。",
+        text: "南屏建村于元代，背靠南屏山，依山而建，地势错落有致，村落肌理层次丰富。",
+        facts: [
+          "格局特点：迷宫式街巷格局，沿山势层层递进，以宗祠群为核心，36口古井、72条小巷、300幢古民居交织成复杂空间，街巷狭长幽深，空间氛围感极强。",
+          "文化背景：叶、李、程三大家族聚居，宗族势力均衡，形成皖南少见的多姓共居村落，保留明清商住混合建筑形态，宗族文化与乡土气息浓厚。",
+          "核心建筑：叶氏宗祠、叙秩堂、半春园、慎思堂。",
+          "建筑特色：祠堂数量密集，被誉为“徽州祠堂博物馆”，古民居保存完好，街巷空间独特，是徽州宗族建筑与民居建筑的结合体。"
+        ],
+        photo: "assets/images/nanping.jpg",
+        alt: "南屏"
+      },
+      chaji: {
+        title: "查济",
+        tags: ["隋", "沿河而建"],
+        honor: "全国重点文物保护单位、中国最大明清古村落、全国知名艺术写生基地。",
+        text: "查济建村于隋末唐初，沿查济河两岸分布，依山傍水，原生态自然环境保存完好。",
+        facts: [
+          "格局特点：沿河带状布局，村落沿河道绵延数里，民居连片成群，是皖南现存规模最大的古民居群落，村落自然生长，桥、巷、古建密集，乡土肌理完整。",
+          "文化背景：查氏家族聚居地，以农耕、商贸、手工为传统生计，依水而建、因水而兴，是研究皖南乡土民居、宗族文化的重要实物样本。",
+          "核心建筑：宝公祠、洪公祠、二甲祠、德公厅屋、红楼桥。",
+          "建筑特色：建筑风格古朴粗犷，少华丽雕琢，极具皖南乡土民居本色，沿河吊脚楼、古石桥、水埠头遍布，原生态保存度极高。"
+        ],
+        photo: "assets/images/chaji.jpg",
+        alt: "查济"
+      },
+      tangyue: {
+        title: "棠樾",
+        tags: ["宋", "牌坊群串联"],
+        honor: "全国重点文物保护单位、国家5A级旅游景区、徽州牌坊文化核心代表。",
+        text: "棠樾建村于宋代，前临溪水，后倚龙山，山水相依，礼制空间布局规整有序。",
+        facts: [
+          "格局特点：以棠樾牌坊群为纵向主轴线，民居沿轴线对称分布，形成“牌坊—祠堂—民居—田园”的完整礼制空间，严格遵循儒家伦理等级，是徽州礼制村落的典型代表。",
+          "文化背景：鲍氏宗族聚居地，以儒家礼教、忠孝节义为核心，是徽州宗法制度、程朱理学、传统伦理的实物载体，集中展现徽州儒家文化精髓。",
+          "核心建筑：棠樾牌坊群（7座连续牌坊，涵盖忠、孝、节、义）、敦本堂（男祠）、清懿堂（全国唯一徽州女祠）。",
+          "建筑特色：牌坊群规模全国罕见，建筑规制严谨；女祠打破传统宗法局限，是徽州宗法建筑的独特存在，整体建筑彰显儒家伦理文化。"
+        ],
+        photo: "assets/images/tangyue.png",
+        alt: "棠樾"
+      }
+    };
+
+    const pins = document.querySelectorAll(".map-pin");
+    const detailTitle = document.getElementById("detailTitle");
+    const detailTags = document.getElementById("detailTags");
+    const detailText = document.getElementById("detailText");
+    const detailGrid = document.getElementById("detailGrid");
+    const mapStage = document.getElementById("mapStage");
+    const villageHonorText = document.getElementById("villageHonorText");
+    const detailCard = document.getElementById("detailCard");
+
+    function setActive(id) {
+      const item = data[id];
+      if (!item) return;
+      //AI辅助生成：DeepSeek-V3.2,2026-4-15
+      detailCard.classList.add("fade");
+      mapStage.classList.add("fade");
+      pins.forEach(pin => pin.classList.toggle("active", pin.dataset.village === id));
+      setTimeout(() => {
+        detailTitle.textContent = item.title;
+        detailTags.innerHTML = item.tags.map(tag => `<span class="detail-tag">${tag}</span>`).join("");
+        detailText.textContent = item.text;
+        detailGrid.innerHTML = item.facts.map(fact => {
+          const parts = fact.split("：");
+          if (parts.length === 2) {
+            return `<div class="detail-item"><strong>${parts[0]}：</strong>${parts[1]}</div>`;
+          }
+          return `<div class="detail-item">${fact}</div>`;
+        }).join("");
+        mapStage.style.backgroundImage = `url("${item.photo}")`;
+        mapStage.classList.toggle("cover", id === "chengkan");
+        villageHonorText.textContent = item.honor || "请填写该村落价值荣誉";
+        detailCard.classList.remove("fade");
+        mapStage.classList.remove("fade");
+      }, 420);
+    }
+
+    pins.forEach(pin => {
+      pin.addEventListener("click", () => setActive(pin.dataset.village));
+    });
+
+    setActive("xidi");
+
+    const moduleData = {
+      matouqiang: {
+        title: "马头墙",
+        name: "马头墙（也称封火山墙、叠落山墙）",
+        real: "module2_matouqiang_real.jpg",
+        realImg: "assets/images/matouqiang_real.png",
+        imageClass: "wide-view",
+        alignClass: "keep-right",
+        explode: "assets/images/module2_matouqiang_explode.jpg",
+        func: "1. 防火：高出屋面的墙体可阻断火势蔓延，避免连片民居火烧连营。<br>2. 防风：减少强风对屋面瓦件的破坏，增强建筑整体稳定性。<br>3. 排水：阶梯式坡面利于雨水快速排离，减少屋面渗漏。<br>4. 空间界定：形成高低错落的村落天际线，提升视觉层次与辨识度。",
+        craft: "1. 墙体主体以青砖错缝砌筑，灰浆饱满，坚固耐久。<br>2. 顶部呈阶梯状层层叠落，常见三叠、五叠、七叠，等级越高叠数越多。<br>3. 墙面抹白灰，顶部压顶线条流畅，檐角微微上翘，形似昂首马头。<br>4. 大户人家会在墙头做简单线脚、雕花，增强装饰性。",
+        culture: "1. 形似战马昂首，寓意“马到成功、仕途顺遂”。<br>2. 层层向上叠落，象征家族兴旺、步步高升。<br>3. 高低错落的形态也暗含风水“藏风聚气”的理念。"
+      },
+      tianjing: {
+        title: "天井",
+        name: "天井（四水归堂核心空间）",
+        real: "module2_tianjing_real.jpg",
+        realImg: "assets/images/tianjing_real.png",
+        explode: "assets/images/module2_tianjing_explode.jpg",
+        func: "1. 采光：为封闭院落内部提供自然光照，解决深宅内部阴暗问题。<br>2. 通风：形成空气对流，排出屋内湿气、油烟，改善室内微气候。<br>3. 排水：屋面雨水统一汇入天井，经暗沟排出，实现集中排水。<br>4. 安全：便于火灾时取水、疏散，提升居住安全性。",
+        craft: "1. 由正屋、东西厢房、门厅围合而成，多为方形或矩形。<br>2. 地面铺设青石板，四角或中间设石质水漏，连接地下暗沟。<br>3. 四周屋檐向天井内倾斜，保证雨水全部落入天井，即“四水归堂”。<br>4. 大户天井会增设石栏、花坛、水缸，兼具景观功能。",
+        culture: "1. “四水归堂”象征肥水不流外人田，聚财、守财。<br>2. 天井为“天地相通”之处，体现天人合一、阴阳调和的风水思想。<br>3. 围合式结构象征家族团聚、宗族向心力强。"
+      },
+      chuandou: {
+        title: "穿斗式木构架",
+        name: "穿斗式木构架",
+        real: "module2_mugou_real.jpg",
+        realImg: "assets/images/chuandou_real.png",
+        explode: "assets/images/module2_chuandou_explode.jpg",
+        func: "1. 承重：柱子直接承托檩条，不依赖大梁，受力直接、结构稳定。<br>2. 抗震：整体柔性框架，榫卯连接可缓冲地震冲击，抗震性强。<br>3. 适应气候：用料较细、开间灵活，适合皖南多雨潮湿、多风环境。<br>4. 空间实用：柱网密集，适合普通民居、厢房、廊庑等日常空间。",
+        craft: "1. 立柱落地，直接承檩，柱间用“穿枋”横向串联成整体。<br>2. 全部采用榫卯结构，不用铁钉，拆装维修方便。<br>3. 木材多用杉木、松木，轻质且不易变形，防虫防腐处理。<br>4. 檐柱、金柱高度依次变化，形成屋面坡度。",
+        culture: "1. 结构细密紧凑，象征家族根基稳固、人丁兴旺。<br>2. 实用节俭的营造方式，体现徽州人务实内敛的性格。"
+      },
+      tailiang: {
+        title: "抬梁式木构架",
+        name: "抬梁式木构架",
+        real: "module2_tailiang_real.jpg",
+        realImg: "assets/images/menchuang_real.png",
+        explode: "assets/images/module2_tailiang_explode.png",
+        func: "1. 大空间支撑：通过层层抬梁扩大室内跨度，形成宽敞无柱的厅堂。<br>2. 礼制象征：多用于祠堂、正厅、大堂等重要空间，体现等级与气派。<br>3. 结构庄重：整体刚度大，承重能力强，适合高大宏伟建筑。",
+        craft: "1. 柱上放置大梁，梁上立短柱，短柱再承小梁，层层抬升。<br>2. 梁柱粗大厚重，榫卯复杂，部分配以替木、斗拱过渡。<br>3. 多选用质地坚硬的木料，如柏木、楠木、优质杉木。<br>4. 梁枋常做木雕、彩绘，彰显主人身份与财力。",
+        culture: "1. 厅堂开阔大气，象征家族地位显赫、财大气粗。<br>2. 规整对称结构，体现儒家礼制秩序、长幼尊卑观念。"
+      },
+      tangwu: {
+        title: "堂屋",
+        name: "堂屋（正厅、中堂）",
+        real: "module2_tangwu_real.jpg",
+        realImg: "assets/images/tangwu_real.jpg",
+        explode: "assets/images/module2_tangwu_explode.jpg",
+        func: "1. 礼制核心：祭祀祖先、接待贵宾、举办婚丧嫁娶等重大仪式。<br>2. 家族中心：议事、团聚、家训传承的核心空间。<br>3. 空间秩序：居中对称，体现主次分明、内外有别的居住伦理。",
+        craft: "1. 位于建筑群中轴线上，面阔多为三间，明厅最大。<br>2. 后部设太师壁、供奉台，摆放祖先牌位、匾额、条案。<br>3. 前方正对天井，采光最好，地面略高于厢房以示尊贵。<br>4. 门窗、梁架装饰最精美，彰显家族脸面。",
+        culture: "1. 尊祖敬宗、忠孝传家，是徽州儒家文化的空间体现。<br>2. 对称规整象征家庭和睦、秩序井然。"
+      },
+      menchuang: {
+        title: "门窗隔扇",
+        name: "门窗隔扇",
+        real: "module2_menchuang_real.jpg",
+        realImg: "assets/images/tailiang_real.png",
+        imageClass: "wide-view",
+        alignClass: "shift-left-sm",
+        explode: "assets/images/module2_menchuang_explode.jpg",
+        func: "1. 采光通风：大面积棂格与可开启扇，兼顾通透与私密。<br>2. 空间分隔：灵活划分室内外、厅堂与厢房。<br>3. 安全防护：细密棂格与坚固木框起到防盗、防护作用。<br>4. 装饰立面：是徽州三雕最重要的展示载体之一。",
+        craft: "1. 主体为杉木框架，棂格采用榫卯拼接，样式丰富（冰裂纹、方格、海棠纹等）。<br>2. 大面积使用木雕，题材多为花鸟、人物、吉祥纹样。<br>3. 工艺结合浮雕、透雕、线刻，层次丰富。<br>4. 外部可加装可拆卸的防风板、防雨板。",
+        culture: "1. 图案多含吉祥寓意：松鹤延年、麒麟送子、富贵牡丹等。<br>2. 精致雕刻体现“耕读传家”，彰显书香门第气质。"
+      }
+    };
+
+    const moduleButtons = document.querySelectorAll(".module-btn");
+    const moduleReal = document.getElementById("moduleReal");
+    const moduleRealImg = document.getElementById("moduleRealImg");
+    const moduleExplode = document.getElementById("moduleExplode");
+    const moduleName = document.getElementById("moduleName");
+    const moduleFunc = document.getElementById("moduleFunc");
+    const moduleCraft = document.getElementById("moduleCraft");
+    const moduleCulture = document.getElementById("moduleCulture");
+    const moduleDetail = document.getElementById("moduleDetail");
+
+    function setModule(id) {
+      const item = moduleData[id];
+      if (!item) return;
+      //AI辅助生成：DeepSeek-V3.2,2026-4-15
+      moduleDetail.classList.add("fade");
+      moduleButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.module === id));
+      setTimeout(() => {
+        if (item.realImg) {
+          moduleRealImg.src = item.realImg;
+          moduleRealImg.alt = `${item.title}实拍图`;
+          moduleRealImg.classList.toggle("wide-view", item.imageClass === "wide-view");
+          moduleRealImg.classList.toggle("keep-right", item.alignClass === "keep-right");
+          moduleRealImg.classList.toggle("shift-left-sm", item.alignClass === "shift-left-sm");
+          moduleRealImg.style.display = "block";
+        } else {
+          moduleRealImg.classList.remove("wide-view");
+          moduleRealImg.classList.remove("keep-right");
+          moduleRealImg.classList.remove("shift-left-sm");
+          moduleRealImg.style.display = "none";
+        }
+        if (item.explode) {
+          moduleExplode.innerHTML = `<img src="${item.explode}?v=2" alt="${item.title}拆解图">`;
+        } else {
+          moduleExplode.textContent = "";
+        }
+        moduleName.innerHTML = `<strong>构件名称：</strong>${item.name || item.title}`;
+        moduleFunc.innerHTML = `<strong>功能原理：</strong>${item.func}`;
+        moduleCraft.innerHTML = `<strong>营造工艺：</strong>${item.craft}`;
+        moduleCulture.innerHTML = `<strong>文化寓意：</strong>${item.culture}`;
+        moduleDetail.classList.remove("fade");
+      }, 200);
+    }
+
+    moduleButtons.forEach(btn => {
+      btn.addEventListener("click", () => setModule(btn.dataset.module));
+    });
+
+    // 默认显示马头墙，避免首次进入时拆解图为空
+    setModule("matouqiang");
+
+    const artCards = Array.from(document.querySelectorAll(".art-card"));
+    let artTicking = false;
+
+    function updateArtCardFocus() {
+      const viewportCenterY = window.innerHeight / 2;
+      artCards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const cardCenterY = rect.top + rect.height / 2;
+        const distance = Math.abs(cardCenterY - viewportCenterY);
+        const normalized = Math.min(distance / (window.innerHeight * 0.45), 1);
+        const scale = 1 - normalized * 0.22;
+        const opacity = 1 - normalized * 0.4;
+        card.style.setProperty("--card-scale", scale.toFixed(3));
+        card.style.setProperty("--card-opacity", opacity.toFixed(3));
+        card.classList.toggle("is-center", normalized < 0.18);
+      });
+      artTicking = false;
+    }
+
+    function requestArtCardFocusUpdate() {
+      if (artTicking) return;
+      artTicking = true;
+      //AI辅助生成：DeepSeek-V3.2,2026-4-15
+      window.requestAnimationFrame(updateArtCardFocus);
+    }
+
+    window.addEventListener("scroll", requestArtCardFocusUpdate, { passive: true });
+    window.addEventListener("resize", requestArtCardFocusUpdate);
+    requestArtCardFocusUpdate();
+
+    const waterMapItems = Array.from(document.querySelectorAll(".water-map-item[data-water-target]"));
+    const waterNodes = Array.from(document.querySelectorAll(".water-node[data-water-node]"));
+
+    function focusWaterNode(target) {
+      const targetNode = waterNodes.find(node => node.dataset.waterNode === target);
+      if (!targetNode) return;
+
+      waterMapItems.forEach(item => {
+        item.classList.toggle("active", item.dataset.waterTarget === target);
+      });
+
+      waterNodes.forEach(node => {
+        const isTarget = node.dataset.waterNode === target;
+        node.classList.toggle("active", isTarget);
+        node.classList.toggle("inactive", !isTarget);
+      });
+      //AI辅助生成：DeepSeek-V3.2,2026-4-15
+      targetNode.classList.remove("jump-in");
+      window.requestAnimationFrame(() => targetNode.classList.add("jump-in"));
+      setTimeout(() => targetNode.classList.remove("jump-in"), 560);
+
+      const topOffset = 18;
+      const targetTop = window.scrollY + targetNode.getBoundingClientRect().top - topOffset;
+      window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+    }
+
+    waterMapItems.forEach(item => {
+      item.addEventListener("click", () => focusWaterNode(item.dataset.waterTarget));
+    });
+
+    const compareData = {
+      layout: {
+        wannan: "以天井为核心，遵循“四水归堂”；粉墙黛瓦与马头墙形成鲜明轮廓，可中轴对称也可依山就势灵活营建，多进院落层层递进、巷道曲折有序。",
+        siheyuan: "严格中轴对称、方正规整，由正房、厢房、倒座围合；前堂后寝、主次分明，空间组织高度礼制化，强调家族秩序与内外分区。",
+        tulou: "以环形或方形封闭围合为核心，外墙厚重少窗；内部沿环分布住房，中心共享庭院，形成“外防御、内共享”的聚族空间结构。",
+        diff: "皖南民居重灵活与风水，四合院重礼制秩序，土楼重防御聚居。",
+        common: "三者都强调聚族而居与因地制宜，均通过院落/围合空间组织家族生活与公共活动。",
+        repW: "西递履福堂、宏村承志堂、呈坎燕来堂",
+        repB: "故宫四合院、恭王府院落、南锣鼓巷标准四合院",
+        repF: "承启楼、振成楼、二宜楼、环极楼",
+        geoW: "安徽黄山、歙县、黟县、泾县等皖南区域",
+        geoB: "北京市区及华北平原地区",
+        geoF: "福建永定、南靖、龙岩等客家山区"
+      },
+      space: {
+        wannan: "小天井高耸，兼具采光、通风、排水与防潮；厅堂居中，公共与私密空间过渡自然，整体尺度紧凑而不压迫。",
+        siheyuan: "庭院开阔，内外院分区严格；正房厢房遵循长幼尊卑，礼仪空间与居住空间清晰分离，空间秩序明确。",
+        tulou: "无独立私家院落，住房沿环均匀排布，中心庭院共享，空间高度集约化，满足多代同居与集体活动需求。",
+        diff: "皖南民居重私密与气候适配，四合院重礼仪分区，土楼重共享与集体组织。",
+        common: "都以“院/心”作为组织核心，通过中心空间带动日常交流与家族仪式活动。",
+        repW: "西递、宏村多进院落民居",
+        repB: "一进至四进四合院体系",
+        repF: "大型圆楼与方楼群体",
+        geoW: "山地丘陵与水系密布环境",
+        geoB: "平原城市与街巷院落环境",
+        geoF: "山区盆地与防御型聚居环境"
+      },
+      material: {
+        wannan: "穿斗式木构为主体、核心厅堂辅以抬梁；砖木混合、小青瓦屋面，榫卯连接精细，重点解决南方潮湿多雨环境下的排水与通风问题。",
+        siheyuan: "抬梁式木构为主，梁柱厚重、墙体密实、台基较高，整体稳重，保温隔热性能优异，更适配北方寒冷干燥气候。",
+        tulou: "夯土墙、石基、木构混合，外墙厚重，抗震、防风、防火能力强，强调耐久与防御安全。",
+        diff: "皖南轻质通风、四合院厚实保温、土楼稳固防御。",
+        common: "三者都以木构为重要骨架，并在地材选择上体现明显的地域适配策略。",
+        repW: "徽派榫卯木构与砖木结合",
+        repB: "官式抬梁木构与厚墙体系",
+        repF: "夯土厚墙与石木复合体系",
+        geoW: "南方多雨湿润气候区",
+        geoB: "北方寒冷干燥气候区",
+        geoF: "山区湿热多雨且需防御区域"
+      },
+      function: {
+        wannan: "集居住、祭祀、待客、藏书储物于一体；马头墙防火防风，天井调节微气候，兼顾宜居功能与宗族礼仪。",
+        siheyuan: "礼仪功能突出，正厅祭祖议事，厢房分辈居住；整体服务封建家族秩序，同时兼顾北方保暖防风需求。",
+        tulou: "满足全族几代共同居住，兼具祭祀、仓储、取水与防御，自给自足能力强，适合山区长期聚居。",
+        diff: "皖南重宜居与文化传承，四合院重礼制等级，土楼重生存防御与集体生活。",
+        common: "都不是单一居住容器，而是居住、礼仪与社会组织功能叠加的复合型建筑系统。",
+        repW: "天井+厅堂+马头墙综合系统",
+        repB: "前堂后寝与内外院礼仪系统",
+        repF: "围合防御与共享庭院系统",
+        geoW: "商居合一的徽州村镇",
+        geoB: "家族院落型城市空间",
+        geoF: "族群抱团的山区聚居点"
+      },
+      decor: {
+        wannan: "以徽州三雕为核心，题材偏琴棋书画、花鸟山水与忠孝节义，风格文雅克制、书卷气浓厚，细部工艺辨识度高。",
+        siheyuan: "官式规制装饰明显，砖雕、石雕与彩绘庄重大气，强调家族身份、礼制等级与都城审美秩序。",
+        tulou: "装饰极简，主要在大门与祖堂少量点缀，以实用坚固为优先，视觉重点服从防御与生活效率。",
+        diff: "皖南重精工文雅，四合院重规制华整，土楼重朴素实用。",
+        common: "装饰都服务于文化表达，只是“文雅性、规制性、实用性”的权重不同。",
+        repW: "木雕隔扇、砖雕门罩、石雕构件",
+        repB: "彩绘梁枋、砖雕门楼、石雕台基",
+        repF: "门楼与祖堂局部简饰",
+        geoW: "徽州三雕传统工艺区",
+        geoB: "京城官式建筑审美区",
+        geoF: "客家防御聚居建筑区"
+      },
+      culture: {
+        wannan: "融合徽商文化、程朱理学、宗族制度与风水观，强调耕读传家与贾而好儒，重文脉与家风延续。",
+        siheyuan: "是封建宗法礼制与京城等级文化的建筑化表达，核心在尊卑有序、内外有别与家族规制。",
+        tulou: "根植客家迁徙文化与宗族抱团文化，强调集体至上、安全优先、聚族自保与共同生产生活。",
+        diff: "皖南重文脉传承，四合院重礼制秩序，土楼重迁徙生存与群体协作。",
+        common: "都承载宗族记忆与地域文化，是地方社会结构与价值观在建筑层面的具象化。",
+        repW: "徽商家族礼居合一的居住文化",
+        repB: "都城礼制与官宦家族秩序文化",
+        repF: "客家族群迁徙与防御文化",
+        geoW: "皖南徽州文化圈",
+        geoB: "京津冀华北礼制文化圈",
+        geoF: "闽西南客家文化圈"
+      }
+    };
+
+    const compareGrid = document.getElementById("compareGrid");
+    const compareButtons = Array.from(document.querySelectorAll(".compare-dim-btn"));
+    const compareWannanText = document.getElementById("compareWannanText");
+    const compareSiheyuanText = document.getElementById("compareSiheyuanText");
+    const compareTulouText = document.getElementById("compareTulouText");
+    const compareDiffText = document.getElementById("compareDiffText");
+    const compareCommonText = document.getElementById("compareCommonText");
+    const compareWannanRep = document.getElementById("compareWannanRep");
+    const compareSiheyuanRep = document.getElementById("compareSiheyuanRep");
+    const compareTulouRep = document.getElementById("compareTulouRep");
+    const compareWannanGeo = document.getElementById("compareWannanGeo");
+    const compareSiheyuanGeo = document.getElementById("compareSiheyuanGeo");
+    const compareTulouGeo = document.getElementById("compareTulouGeo");
+    const compareCards = Array.from(document.querySelectorAll(".compare-card"));
+
+    function renderCompare(dim) {
+      const item = compareData[dim];
+      if (!item) return;
+      compareWannanText.textContent = item.wannan;
+      compareSiheyuanText.textContent = item.siheyuan;
+      compareTulouText.textContent = item.tulou;
+      compareDiffText.textContent = item.diff;
+      compareCommonText.textContent = item.common;
+      compareWannanRep.textContent = item.repW;
+      compareSiheyuanRep.textContent = item.repB;
+      compareTulouRep.textContent = item.repF;
+      compareWannanGeo.textContent = item.geoW;
+      compareSiheyuanGeo.textContent = item.geoB;
+      compareTulouGeo.textContent = item.geoF;
+    }
+
+    function setCompareDim(dim) {
+      compareButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.dim === dim));
+      //AI辅助生成：DeepSeek-V3.2,2026-4-15
+      compareGrid.classList.add("switching");
+      setTimeout(() => {
+        renderCompare(dim);
+        compareGrid.classList.remove("switching");
+        compareCards.forEach((card, idx) => {
+          card.classList.remove("pop-in");
+          card.style.animationDelay = `${idx * 70}ms`;
+          window.requestAnimationFrame(() => card.classList.add("pop-in"));
+        });
+      }, 220);
+    }
+
+    compareButtons.forEach(btn => {
+      btn.addEventListener("click", () => setCompareDim(btn.dataset.dim));
+    });
+
+    renderCompare("layout");
+
+  </script>
+</body>
+</html>
