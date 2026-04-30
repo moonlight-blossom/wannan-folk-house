@@ -32,24 +32,22 @@
       margin: 0;
       font-family: "Songti SC", "Noto Serif SC", "Source Han Serif SC", serif;
       color: var(--ink);
-      background:
-        radial-gradient(circle at 12% 12%, rgba(142, 160, 174, 0.28), transparent 40%),
-        radial-gradient(circle at 88% 88%, rgba(77, 89, 102, 0.2), transparent 38%),
-        linear-gradient(160deg, #eff3f5 0%, #f9fbfc 52%, #e9eff2 100%);
+      background: #eef2f4;
       min-height: 100vh;
       line-height: 1.7;
+      position: relative;
     }
 
     .pattern {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: 0.28;
+      opacity: 0.18;
       background-image:
         linear-gradient(45deg, rgba(77, 89, 102, 0.05) 25%, transparent 25%),
         linear-gradient(-45deg, rgba(86, 105, 122, 0.04) 25%, transparent 25%);
       background-size: 42px 42px;
-      z-index: -1;
+      z-index: 1;
     }
 
     .side-ornament {
@@ -88,6 +86,17 @@
       overflow: visible;
       background: transparent;
       z-index: 20;
+      pointer-events: auto;
+      transform: translateY(-100%);
+      opacity: 0;
+      animation: heroCoverEnter 1.3s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+      transition: transform 560ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 560ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    .hero-cover.is-dismissed {
+      animation: none !important;
+      transform: translateY(-100%);
+      opacity: 0;
       pointer-events: none;
     }
 
@@ -96,9 +105,6 @@
       height: auto;
       object-fit: contain;
       display: block;
-      transform: translateY(-100%);
-      opacity: 0;
-      animation: coverInOut 2.4s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
     }
 
     .hero-poem {
@@ -110,14 +116,60 @@
       object-fit: contain;
       opacity: 0;
       filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.22));
-      transform: translateY(-60%);
-      animation: poemInOut 2.4s ease forwards;
+      transform: translateY(-8px);
+      animation: poemFadeInOnly 1.8s ease forwards 0.6s;
       pointer-events: none;
+    }
+
+    .hero-dismiss-tip {
+      position: absolute;
+      left: 18px;
+      bottom: 14px;
+      color: rgba(255, 255, 255, 0.92);
+      font-size: 0.86rem;
+      background: rgba(0, 0, 0, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 999px;
+      padding: 6px 10px;
+      opacity: 0;
+      transform: translateY(4px);
+      animation: heroDismissTipIn 420ms ease forwards 1s;
+      pointer-events: none;
+    }
+
+    .ginkgo-fall {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: min(56vh, 440px);
+      pointer-events: none;
+      opacity: 0;
+      z-index: 5;
+      transition: opacity 600ms ease;
+      overflow: hidden;
+    }
+
+    .ginkgo-fall.active {
+      opacity: 0.52;
+    }
+
+    .ginkgo-leaf {
+      position: absolute;
+      top: -40px;
+      color: rgba(196, 164, 58, 0.9);
+      font-size: clamp(12px, 1.3vw, 18px);
+      filter: blur(0.2px);
+      animation-name: ginkgoFall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
     }
 
     .container {
       width: min(1180px, 92vw);
       margin: 0 auto;
+      position: relative;
+      z-index: 2;
     }
 
     .top-nav {
@@ -1073,21 +1125,10 @@
       border-radius: 12px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.36);
       user-select: none;
-      cursor: zoom-in;
-    }
-
-    .module-zoom-lens {
-      position: fixed;
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.88);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.32);
-      pointer-events: none;
-      display: none;
-      background-repeat: no-repeat;
-      background-color: rgba(255, 255, 255, 0.08);
-      z-index: 61;
+      cursor: grab;
+      transform: translate(0px, 0px) scale(1);
+      transform-origin: center center;
+      transition: transform 90ms linear;
     }
 
     .module-zoom-hint {
@@ -1102,6 +1143,11 @@
       padding: 6px 10px;
       pointer-events: none;
       z-index: 61;
+    }
+
+    .module-zoom-hint-left {
+      left: 20px;
+      right: auto;
     }
 
     @media (max-width: 980px) {
@@ -1156,6 +1202,11 @@
         top: 8px;
         height: min(28vh, 170px);
       }
+      .hero-dismiss-tip {
+        left: 10px;
+        bottom: 8px;
+        font-size: 0.8rem;
+      }
       .detail-grid {
         grid-template-columns: 1fr;
       }
@@ -1194,14 +1245,13 @@
       .module-zoom-overlay {
         padding: 16px;
       }
-      .module-zoom-lens {
-        width: 132px;
-        height: 132px;
-      }
       .module-zoom-hint {
         right: 12px;
         bottom: 10px;
         font-size: 0.8rem;
+      }
+      .module-zoom-hint-left {
+        left: 12px;
       }
     }
 
@@ -1222,18 +1272,33 @@
       100% { transform: translateY(0) scale(1); opacity: 1; }
     }
 
-    @keyframes coverInOut {
-      0% { transform: translateY(-100%); opacity: 0; }
-      20% { transform: translateY(0); opacity: 1; }
-      62% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-100%); opacity: 0; }
+    @keyframes heroCoverEnter {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
-    @keyframes poemInOut {
-      0% { transform: translateY(-60%); opacity: 0; }
-      20% { transform: translateY(0); opacity: 1; }
-      62% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-70%); opacity: 0; }
+    @keyframes poemFadeInOnly {
+      from { transform: translateY(-8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes heroDismissTipIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes ginkgoFall {
+      0% {
+        transform: translate3d(0, -20px, 0) rotate(0deg);
+        opacity: 0;
+      }
+      12% {
+        opacity: 0.9;
+      }
+      100% {
+        transform: translate3d(var(--dx, 40px), calc(min(42vh, 320px) + 42px), 0) rotate(var(--rot, 180deg));
+        opacity: 0;
+      }
     }
 
   </style>
@@ -1244,9 +1309,11 @@
   <div class="side-ornament right" aria-hidden="true"></div>
 
   <section class="hero-cover" aria-label="封面">
-    <img class="hero-cover-image" src="assets/images/cover.webp" alt="皖南民居封面图">
-    <img class="hero-poem" src="assets/images/poem.webp" alt="诗句题字">
+    <img class="hero-cover-image" src="assets/images/cover.webp" alt="皖南民居封面图" decoding="async" fetchpriority="high">
+    <img class="hero-poem" src="assets/images/poem.webp" alt="诗句题字" decoding="async" fetchpriority="high">
+    <div class="hero-dismiss-tip">点击任意位置关闭</div>
   </section>
+  <div class="ginkgo-fall" id="ginkgoFall" aria-hidden="true"></div>
 
   <nav class="top-nav" aria-label="模块导航">
     <div class="top-nav-inner">
@@ -1554,11 +1621,54 @@
   <button class="back-to-top" id="backToTopBtn" type="button" aria-label="返回顶部">返回顶部</button>
   <div class="module-zoom-overlay" id="moduleZoomOverlay" aria-hidden="true">
     <img class="module-zoom-image" id="moduleZoomImage" alt="结构拆解图放大预览">
-    <div class="module-zoom-lens" id="moduleZoomLens" aria-hidden="true"></div>
+    <div class="module-zoom-hint module-zoom-hint-left">滑动滚轮调节大小</div>
     <div class="module-zoom-hint">点击空白处退出</div>
   </div>
 
   <script>
+    const heroCover = document.querySelector(".hero-cover");
+    const ginkgoFall = document.getElementById("ginkgoFall");
+    let heroDismissed = false;
+
+    function randomizeGinkgoLeaf(leaf, allowNegativeDelay = false) {
+      const left = Math.random() * 100;
+      const dx = (Math.random() * 120 - 60).toFixed(0);
+      const rot = (Math.random() * 520 - 260).toFixed(0);
+      const duration = (6.4 + Math.random() * 4.4).toFixed(2);
+      const delay = allowNegativeDelay ? -(Math.random() * Number(duration)) : (Math.random() * 2.2);
+      const size = 12 + Math.random() * 10;
+      leaf.style.left = `${left}%`;
+      leaf.style.setProperty("--dx", `${dx}px`);
+      leaf.style.setProperty("--rot", `${rot}deg`);
+      leaf.style.animationDuration = `${duration}s`;
+      leaf.style.animationDelay = `${delay}s`;
+      leaf.style.fontSize = `${size.toFixed(1)}px`;
+    }
+
+    function initGinkgoLeaves() {
+      if (!ginkgoFall || ginkgoFall.childElementCount > 0) return;
+      const count = 24;
+      for (let i = 0; i < count; i += 1) {
+        const leaf = document.createElement("span");
+        leaf.className = "ginkgo-leaf";
+        leaf.textContent = "❧";
+        randomizeGinkgoLeaf(leaf, true);
+        leaf.addEventListener("animationiteration", () => {
+          randomizeGinkgoLeaf(leaf, false);
+        });
+        ginkgoFall.appendChild(leaf);
+      }
+    }
+
+    function dismissHeroCover() {
+      if (!heroCover || heroDismissed) return;
+      heroDismissed = true;
+      initGinkgoLeaves();
+      heroCover.classList.add("is-dismissed");
+      if (ginkgoFall) ginkgoFall.classList.add("active");
+    }
+    window.addEventListener("click", dismissHeroCover, { once: true, capture: true });
+
     function loadImgElement(img) {
       if (!img || img.dataset.loaded === "1") return;
       const actual = img.dataset.src;
@@ -1805,7 +1915,14 @@
     const moduleDetail = document.getElementById("moduleDetail");
     const moduleZoomOverlay = document.getElementById("moduleZoomOverlay");
     const moduleZoomImage = document.getElementById("moduleZoomImage");
-    const moduleZoomLens = document.getElementById("moduleZoomLens");
+    let moduleZoomScale = 1;
+    let moduleZoomOffsetX = 0;
+    let moduleZoomOffsetY = 0;
+    let moduleZoomDragging = false;
+    let moduleZoomDragStartX = 0;
+    let moduleZoomDragStartY = 0;
+    let moduleZoomStartOffsetX = 0;
+    let moduleZoomStartOffsetY = 0;
 
     function setModule(id) {
       const item = moduleData[id];
@@ -1849,7 +1966,12 @@
     function openModuleZoomPreview(sourceImg) {
       const previewSrc = sourceImg.dataset.src || sourceImg.currentSrc || sourceImg.src;
       if (!previewSrc) return;
+      moduleZoomScale = 1;
+      moduleZoomOffsetX = 0;
+      moduleZoomOffsetY = 0;
       moduleZoomImage.src = previewSrc;
+      moduleZoomImage.style.transform = "translate(0px, 0px) scale(1)";
+      moduleZoomImage.style.cursor = "grab";
       moduleZoomOverlay.classList.add("show");
       moduleZoomOverlay.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
@@ -1858,7 +1980,7 @@
     function closeModuleZoomPreview() {
       moduleZoomOverlay.classList.remove("show");
       moduleZoomOverlay.setAttribute("aria-hidden", "true");
-      moduleZoomLens.style.display = "none";
+      moduleZoomDragging = false;
       document.body.style.overflow = "";
     }
 
@@ -1872,27 +1994,45 @@
       if (event.target === moduleZoomOverlay) closeModuleZoomPreview();
     });
 
-    moduleZoomImage.addEventListener("mousemove", (event) => {
-      const rect = moduleZoomImage.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
-        moduleZoomLens.style.display = "none";
-        return;
+    function applyModuleZoomTransform() {
+      moduleZoomImage.style.transform = `translate(${moduleZoomOffsetX}px, ${moduleZoomOffsetY}px) scale(${moduleZoomScale})`;
+    }
+
+    moduleZoomImage.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      const step = event.deltaY > 0 ? -0.12 : 0.12;
+      const nextScale = Math.min(4, Math.max(1, moduleZoomScale + step));
+      if (nextScale === 1) {
+        moduleZoomOffsetX = 0;
+        moduleZoomOffsetY = 0;
       }
-      const rx = x / rect.width;
-      const ry = y / rect.height;
-      const zoomScale = 2.2;
-      moduleZoomLens.style.display = "block";
-      moduleZoomLens.style.left = `${event.clientX + 18}px`;
-      moduleZoomLens.style.top = `${event.clientY + 18}px`;
-      moduleZoomLens.style.backgroundImage = `url("${moduleZoomImage.src}")`;
-      moduleZoomLens.style.backgroundSize = `${rect.width * zoomScale}px ${rect.height * zoomScale}px`;
-      moduleZoomLens.style.backgroundPosition = `${-(rx * rect.width * zoomScale - moduleZoomLens.offsetWidth / 2)}px ${-(ry * rect.height * zoomScale - moduleZoomLens.offsetHeight / 2)}px`;
+      moduleZoomScale = nextScale;
+      moduleZoomImage.style.cursor = moduleZoomScale > 1 ? "grab" : "zoom-in";
+      applyModuleZoomTransform();
+    }, { passive: false });
+
+    moduleZoomImage.addEventListener("mousedown", (event) => {
+      if (moduleZoomScale <= 1) return;
+      event.preventDefault();
+      moduleZoomDragging = true;
+      moduleZoomDragStartX = event.clientX;
+      moduleZoomDragStartY = event.clientY;
+      moduleZoomStartOffsetX = moduleZoomOffsetX;
+      moduleZoomStartOffsetY = moduleZoomOffsetY;
+      moduleZoomImage.style.cursor = "grabbing";
     });
 
-    moduleZoomImage.addEventListener("mouseleave", () => {
-      moduleZoomLens.style.display = "none";
+    window.addEventListener("mousemove", (event) => {
+      if (!moduleZoomDragging) return;
+      moduleZoomOffsetX = moduleZoomStartOffsetX + (event.clientX - moduleZoomDragStartX);
+      moduleZoomOffsetY = moduleZoomStartOffsetY + (event.clientY - moduleZoomDragStartY);
+      applyModuleZoomTransform();
+    });
+
+    window.addEventListener("mouseup", () => {
+      if (!moduleZoomDragging) return;
+      moduleZoomDragging = false;
+      moduleZoomImage.style.cursor = moduleZoomScale > 1 ? "grab" : "zoom-in";
     });
 
     window.addEventListener("keydown", (event) => {
