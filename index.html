@@ -67,14 +67,14 @@
 
     .side-ornament.left {
       left: 8px;
-      background-image: url("assets/images/side_left.jpg");
+      background-image: url("assets/images/side_left.webp");
       -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 64%, rgba(0, 0, 0, 0));
       mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 64%, rgba(0, 0, 0, 0));
     }
 
     .side-ornament.right {
       right: 8px;
-      background-image: url("assets/images/side_right.jpg");
+      background-image: url("assets/images/side_right.webp");
       -webkit-mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 64%, rgba(0, 0, 0, 0));
       mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 64%, rgba(0, 0, 0, 0));
     }
@@ -416,6 +416,19 @@
       margin: 0 0 14px;
       color: rgba(29, 36, 42, 0.7);
       font-size: 0.98rem;
+    }
+
+    .module-subtitle-tip {
+      font-size: 0.88rem;
+      color: rgba(195, 106, 74, 0.9);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .module-explode-tip {
+      grid-column: 2;
+      justify-self: center;
+      margin-top: 2px;
     }
 
     .module-layout {
@@ -1005,6 +1018,92 @@
       font-size: 0.92rem;
     }
 
+    .back-to-top {
+      position: fixed;
+      right: 20px;
+      bottom: 26px;
+      z-index: 25;
+      border: 1px solid rgba(45, 57, 70, 0.2);
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 0.86rem;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(36, 50, 64, 0.14);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: opacity 220ms ease, visibility 220ms ease, transform 220ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover {
+      border-color: rgba(195, 106, 74, 0.55);
+      background: rgba(195, 106, 74, 0.1);
+    }
+
+    .module-zoom-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      background: rgba(12, 16, 20, 0.82);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+    }
+
+    .module-zoom-overlay.show {
+      display: flex;
+    }
+
+    .module-zoom-image {
+      max-width: min(90vw, 1200px);
+      max-height: 88vh;
+      width: auto;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.36);
+      user-select: none;
+      cursor: zoom-in;
+    }
+
+    .module-zoom-lens {
+      position: fixed;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.88);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.32);
+      pointer-events: none;
+      display: none;
+      background-repeat: no-repeat;
+      background-color: rgba(255, 255, 255, 0.08);
+      z-index: 61;
+    }
+
+    .module-zoom-hint {
+      position: absolute;
+      right: 20px;
+      bottom: 16px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.86rem;
+      background: rgba(0, 0, 0, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 999px;
+      padding: 6px 10px;
+      pointer-events: none;
+      z-index: 61;
+    }
+
     @media (max-width: 980px) {
       .map-layout {
         grid-template-columns: 1fr;
@@ -1072,6 +1171,9 @@
       .file-grid {
         grid-template-columns: 1fr;
       }
+      .module-explode-tip {
+        grid-column: 1;
+      }
       .art-grid {
         grid-template-columns: 1fr;
       }
@@ -1084,6 +1186,23 @@
       }
       .side-ornament.left { left: 2px; }
       .side-ornament.right { right: 2px; }
+      .back-to-top {
+        right: 12px;
+        bottom: 16px;
+        padding: 8px 12px;
+      }
+      .module-zoom-overlay {
+        padding: 16px;
+      }
+      .module-zoom-lens {
+        width: 132px;
+        height: 132px;
+      }
+      .module-zoom-hint {
+        right: 12px;
+        bottom: 10px;
+        font-size: 0.8rem;
+      }
     }
 
     @keyframes modulePulse {
@@ -1125,8 +1244,8 @@
   <div class="side-ornament right" aria-hidden="true"></div>
 
   <section class="hero-cover" aria-label="封面">
-    <img class="hero-cover-image" src="assets/images/cover.jpg" alt="皖南民居封面图">
-    <img class="hero-poem" src="assets/images/poem.png" alt="诗句题字">
+    <img class="hero-cover-image" src="assets/images/cover.webp" alt="皖南民居封面图">
+    <img class="hero-poem" src="assets/images/poem.webp" alt="诗句题字">
   </section>
 
   <nav class="top-nav" aria-label="模块导航">
@@ -1223,9 +1342,10 @@
           </div>
           <div class="file-grid">
             <div class="file-card image" id="moduleReal">
-              <img id="moduleRealImg" src="assets/images/matouqiang_real.png" alt="马头墙实拍图">
+              <img id="moduleRealImg" class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/matouqiang_real.webp" alt="马头墙实拍图" loading="lazy" decoding="async">
             </div>
             <div class="file-card" id="moduleExplode"></div>
+            <div class="module-subtitle-tip module-explode-tip">点击拆解图放大预览</div>
           </div>
         </div>
       </div>
@@ -1235,7 +1355,7 @@
       <h2 class="art-title">三雕艺术墙</h2>
       <div class="art-grid">
         <article class="art-card">
-          <div class="art-photo"><img src="assets/images/art_wood_1.jpg?v=2" alt="木雕作品：渔樵耕读"></div>
+          <div class="art-photo"><img class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/art_wood_1.webp?v=2" alt="木雕作品：渔樵耕读" loading="lazy" decoding="async"></div>
           <div class="art-name">木雕 · 渔樵耕读</div>
           <div class="art-meta"><strong>雕种：</strong>木雕</div>
           <div class="art-meta"><strong>典型位置：</strong>西递敬爱堂门窗隔扇、宏村承志堂厢房、南屏民居厅堂隔扇</div>
@@ -1245,7 +1365,7 @@
         </article>
 
         <article class="art-card">
-          <div class="art-photo"><img src="assets/images/art_wood_2.jpg?v=2" alt="木雕作品：松鹤延年"></div>
+          <div class="art-photo"><img class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/art_wood_2.webp?v=2" alt="木雕作品：松鹤延年" loading="lazy" decoding="async"></div>
           <div class="art-name">木雕 · 松鹤延年</div>
           <div class="art-meta"><strong>雕种：</strong>木雕</div>
           <div class="art-meta"><strong>典型位置：</strong>宏村承志堂梁垫、月梁、檐枋；西递履福堂正厅横梁</div>
@@ -1255,7 +1375,7 @@
         </article>
 
         <article class="art-card">
-          <div class="art-photo"><img src="assets/images/art_brick_1.jpg?v=2" alt="砖雕作品：福禄寿喜"></div>
+          <div class="art-photo"><img class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/art_brick_1.webp?v=2" alt="砖雕作品：福禄寿喜" loading="lazy" decoding="async"></div>
           <div class="art-name">砖雕 · 福禄寿喜</div>
           <div class="art-meta"><strong>雕种：</strong>砖雕</div>
           <div class="art-meta"><strong>典型位置：</strong>西递、宏村普通民居门罩、门头上方</div>
@@ -1265,7 +1385,7 @@
         </article>
 
         <article class="art-card">
-          <div class="art-photo"><img src="assets/images/art_brick_2.jpg?v=2" alt="砖雕作品：八仙过海"></div>
+          <div class="art-photo"><img class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/art_brick_2.webp?v=2" alt="砖雕作品：八仙过海" loading="lazy" decoding="async"></div>
           <div class="art-name">砖雕 · 八仙过海</div>
           <div class="art-meta"><strong>雕种：</strong>砖雕</div>
           <div class="art-meta"><strong>典型位置：</strong>呈坎罗氏宗祠、宏村祠堂隔扇门窗</div>
@@ -1275,7 +1395,7 @@
         </article>
 
         <article class="art-card">
-          <div class="art-photo"><img src="assets/images/art_stone_2.jpg?v=2" alt="石雕作品：狮子戏球"></div>
+          <div class="art-photo"><img class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/art_stone_2.webp?v=2" alt="石雕作品：狮子戏球" loading="lazy" decoding="async"></div>
           <div class="art-name">石雕 · 狮子戏球</div>
           <div class="art-meta"><strong>雕种：</strong>石雕</div>
           <div class="art-meta"><strong>典型位置：</strong>棠樾牌坊柱础、西递胡氏宗祠门墩、宏村祠堂入口</div>
@@ -1285,7 +1405,7 @@
         </article>
 
         <article class="art-card">
-          <div class="art-photo"><img src="assets/images/art_stone_1.jpg?v=2" alt="石雕作品：荷花漏窗"></div>
+          <div class="art-photo"><img class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/art_stone_1.webp?v=2" alt="石雕作品：荷花漏窗" loading="lazy" decoding="async"></div>
           <div class="art-name">石雕 · 荷花漏窗</div>
           <div class="art-meta"><strong>雕种：</strong>石雕</div>
           <div class="art-meta"><strong>典型位置：</strong>宏村、西递民居院墙漏窗、天井花窗</div>
@@ -1324,7 +1444,7 @@
 
         <div class="water-nodes">
         <article class="water-node" data-water-node="source">
-          <img class="water-node-photo" src="assets/images/water_source.jpg?v=2" alt="水圳源头实景">
+          <img class="water-node-photo lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/water_source.webp?v=2" alt="水圳源头实景" loading="lazy" decoding="async">
           <h3>水圳源头（西溪入口）</h3>
           <p><strong>具体位置：</strong>宏村西北侧，源自黄山余脉羊栈岭山涧溪流。</p>
           <p><strong>水流方向：</strong>自西北向东南，贯穿整个村落。</p>
@@ -1333,7 +1453,7 @@
         </article>
 
         <article class="water-node" data-water-node="main">
-          <img class="water-node-photo" src="assets/images/water_main_canal.jpg?v=2" alt="主水圳实景">
+          <img class="water-node-photo lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/water_main_canal.webp?v=2" alt="主水圳实景" loading="lazy" decoding="async">
           <h3>主水圳（牛肠）</h3>
           <p><strong>具体位置：</strong>沿宏村街巷蜿蜒，分流至家家户户门前。</p>
           <p><strong>水流方向：</strong>自西北向东南，分支环绕民居院落。</p>
@@ -1342,7 +1462,7 @@
         </article>
 
         <article class="water-node" data-water-node="yuezao">
-          <img class="water-node-photo" src="assets/images/water_yuezao.jpg?v=2" alt="月沼实景">
+          <img class="water-node-photo lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/water_yuezao.webp?v=2" alt="月沼实景" loading="lazy" decoding="async">
           <h3>月沼（牛胃）</h3>
           <p><strong>具体位置：</strong>宏村中心，汪氏宗祠北侧。</p>
           <p><strong>水流方向：</strong>主水圳汇入，蓄水后向南流出至南湖。</p>
@@ -1351,7 +1471,7 @@
         </article>
 
         <article class="water-node" data-water-node="nanhu">
-          <img class="water-node-photo" src="assets/images/water_nanhu.jpg?v=2" alt="南湖实景">
+          <img class="water-node-photo lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/water_nanhu.webp?v=2" alt="南湖实景" loading="lazy" decoding="async">
           <h3>南湖（牛肚）</h3>
           <p><strong>具体位置：</strong>宏村南侧，村落末端。</p>
           <p><strong>水流方向：</strong>月沼出水汇入南湖，多余水流外排农田。</p>
@@ -1368,8 +1488,8 @@
             <p><strong>营造特点：</strong>青石砌筑，不占地面空间，数百年运行仍通畅。</p>
           </div>
           <div class="water-node-photo-stack">
-            <img class="water-node-photo side" src="assets/images/water_drainage.jpg?v=2" alt="地下排水系统示意图一">
-            <img class="water-node-photo side" src="assets/images/water_drainage_2.jpg?v=2" alt="地下排水系统示意图二">
+            <img class="water-node-photo side lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/water_drainage.webp?v=2" alt="地下排水系统示意图一" loading="lazy" decoding="async">
+            <img class="water-node-photo side lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/water_drainage_2.webp?v=2" alt="地下排水系统示意图二" loading="lazy" decoding="async">
           </div>
         </article>
         </div>
@@ -1393,7 +1513,7 @@
       <div class="compare-grid" id="compareGrid">
         <article class="compare-card" id="cardWannan">
           <h3>皖南民居（安徽徽州）</h3>
-          <div class="compare-photo"><img src="assets/images/compare_wannan.jpg?v=2" alt="皖南民居示意图"></div>
+          <div class="compare-photo"><img class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/compare_wannan.webp?v=2" alt="皖南民居示意图" loading="lazy" decoding="async"></div>
           <p id="compareWannanText"></p>
           <div class="compare-meta">
             <div><strong>代表：</strong><span id="compareWannanRep"></span></div>
@@ -1402,7 +1522,7 @@
         </article>
         <article class="compare-card" id="cardSiheyuan">
           <h3>北京四合院（华北地区）</h3>
-          <div class="compare-photo tall-photo"><img src="assets/images/compare_siheyuan.jpg?v=6" alt="北京四合院示意图"></div>
+          <div class="compare-photo tall-photo"><img class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/compare_siheyuan.webp?v=6" alt="北京四合院示意图" loading="lazy" decoding="async"></div>
           <p id="compareSiheyuanText"></p>
           <div class="compare-meta">
             <div><strong>代表：</strong><span id="compareSiheyuanRep"></span></div>
@@ -1411,7 +1531,7 @@
         </article>
         <article class="compare-card" id="cardTulou">
           <h3>福建土楼（客家地区）</h3>
-          <div class="compare-photo tall-photo"><img src="assets/images/compare_tulou.jpg?v=6" alt="福建土楼示意图"></div>
+          <div class="compare-photo tall-photo"><img class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/compare_tulou.webp?v=6" alt="福建土楼示意图" loading="lazy" decoding="async"></div>
           <p id="compareTulouText"></p>
           <div class="compare-meta">
             <div><strong>代表：</strong><span id="compareTulouRep"></span></div>
@@ -1431,8 +1551,54 @@
   </main>
 
   <footer class="container"></footer>
+  <button class="back-to-top" id="backToTopBtn" type="button" aria-label="返回顶部">返回顶部</button>
+  <div class="module-zoom-overlay" id="moduleZoomOverlay" aria-hidden="true">
+    <img class="module-zoom-image" id="moduleZoomImage" alt="结构拆解图放大预览">
+    <div class="module-zoom-lens" id="moduleZoomLens" aria-hidden="true"></div>
+    <div class="module-zoom-hint">点击空白处退出</div>
+  </div>
 
   <script>
+    function loadImgElement(img) {
+      if (!img || img.dataset.loaded === "1") return;
+      const actual = img.dataset.src;
+      if (!actual) return;
+      img.src = actual;
+      img.dataset.loaded = "1";
+    }
+
+    function lazyLoadImagesIn(container) {
+      if (!container) return;
+      container.querySelectorAll("img.lazy-module-image[data-src]").forEach(loadImgElement);
+    }
+
+    function registerSectionLazyLoading() {
+      const sections = [
+        document.getElementById("section-structure"),
+        document.getElementById("section-art"),
+        document.getElementById("section-water"),
+        document.getElementById("section-compare")
+      ].filter(Boolean);
+      if (!sections.length) return;
+
+      if (!("IntersectionObserver" in window)) {
+        sections.forEach(lazyLoadImagesIn);
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          lazyLoadImagesIn(entry.target);
+          obs.unobserve(entry.target);
+        });
+      }, { root: null, rootMargin: "160px 0px 220px 0px", threshold: 0.08 });
+
+      sections.forEach(section => observer.observe(section));
+    }
+
+    registerSectionLazyLoading();
+
     const data = {
       xidi: {
         title: "西递",
@@ -1445,7 +1611,7 @@
           "核心建筑：敬爱堂（胡氏宗祠，村落礼制核心）、追慕堂、履福堂（书香民居代表）、膺福堂、凌云阁、走马楼、胡文光刺史牌坊。",
           "建筑特色：完好保存明清民居224幢、祠堂3座、牌坊1座，为典型徽派建筑风格，粉墙黛瓦马头墙，以天井为核心构建三进院落，工艺精湛，建筑细节深度融合徽州礼制与风水文化。"
         ],
-        photo: "assets/images/xidi.png",
+        photo: "assets/images/xidi.webp",
         alt: "西递村"
       },
       hongcun: {
@@ -1459,7 +1625,7 @@
           "核心建筑：承志堂（被誉为“民间故宫”，徽派民居奢华典范）、月沼、南湖、南湖书院、汪氏宗祠、树人堂。",
           "建筑特色：建筑枕山环水，户户临流、家家有水景，厅堂开阔，木雕装饰华丽繁复，水系兼具生活用水、消防、灌溉、景观、调节微气候多重功能，宜居性冠绝皖南古村落。"
         ],
-        photo: "assets/images/hongcun.png",
+        photo: "assets/images/hongcun.webp",
         alt: "宏村"
       },
       chengkan: {
@@ -1473,7 +1639,7 @@
           "核心建筑：罗东舒祠（“江南第一祠”，徽州祠堂建筑巅峰）、燕来堂、环秀楼、文献祠。",
           "建筑特色：祠堂规模宏大、规制严谨，石雕、砖雕等级极高，建筑形制严格遵循儒家礼制，融合风水与宗法文化，尽显徽州传统文化底蕴。"
         ],
-        photo: "assets/images/chengkan.jpg",
+        photo: "assets/images/chengkan.webp",
         alt: "呈坎"
       },
       nanping: {
@@ -1487,7 +1653,7 @@
           "核心建筑：叶氏宗祠、叙秩堂、半春园、慎思堂。",
           "建筑特色：祠堂数量密集，被誉为“徽州祠堂博物馆”，古民居保存完好，街巷空间独特，是徽州宗族建筑与民居建筑的结合体。"
         ],
-        photo: "assets/images/nanping.jpg",
+        photo: "assets/images/nanping.webp",
         alt: "南屏"
       },
       chaji: {
@@ -1501,7 +1667,7 @@
           "核心建筑：宝公祠、洪公祠、二甲祠、德公厅屋、红楼桥。",
           "建筑特色：建筑风格古朴粗犷，少华丽雕琢，极具皖南乡土民居本色，沿河吊脚楼、古石桥、水埠头遍布，原生态保存度极高。"
         ],
-        photo: "assets/images/chaji.jpg",
+        photo: "assets/images/chaji.webp",
         alt: "查济"
       },
       tangyue: {
@@ -1515,7 +1681,7 @@
           "核心建筑：棠樾牌坊群（7座连续牌坊，涵盖忠、孝、节、义）、敦本堂（男祠）、清懿堂（全国唯一徽州女祠）。",
           "建筑特色：牌坊群规模全国罕见，建筑规制严谨；女祠打破传统宗法局限，是徽州宗法建筑的独特存在，整体建筑彰显儒家伦理文化。"
         ],
-        photo: "assets/images/tangyue.png",
+        photo: "assets/images/tangyue.webp",
         alt: "棠樾"
       }
     };
@@ -1566,10 +1732,10 @@
         title: "马头墙",
         name: "马头墙（也称封火山墙、叠落山墙）",
         real: "module2_matouqiang_real.jpg",
-        realImg: "assets/images/matouqiang_real.png",
+        realImg: "assets/images/matouqiang_real.webp",
         imageClass: "wide-view",
         alignClass: "keep-right",
-        explode: "assets/images/module2_matouqiang_explode.jpg",
+        explode: "assets/images/module2_matouqiang_explode.webp",
         func: "1. 防火：高出屋面的墙体可阻断火势蔓延，避免连片民居火烧连营。<br>2. 防风：减少强风对屋面瓦件的破坏，增强建筑整体稳定性。<br>3. 排水：阶梯式坡面利于雨水快速排离，减少屋面渗漏。<br>4. 空间界定：形成高低错落的村落天际线，提升视觉层次与辨识度。",
         craft: "1. 墙体主体以青砖错缝砌筑，灰浆饱满，坚固耐久。<br>2. 顶部呈阶梯状层层叠落，常见三叠、五叠、七叠，等级越高叠数越多。<br>3. 墙面抹白灰，顶部压顶线条流畅，檐角微微上翘，形似昂首马头。<br>4. 大户人家会在墙头做简单线脚、雕花，增强装饰性。",
         culture: "1. 形似战马昂首，寓意“马到成功、仕途顺遂”。<br>2. 层层向上叠落，象征家族兴旺、步步高升。<br>3. 高低错落的形态也暗含风水“藏风聚气”的理念。"
@@ -1578,8 +1744,8 @@
         title: "天井",
         name: "天井（四水归堂核心空间）",
         real: "module2_tianjing_real.jpg",
-        realImg: "assets/images/tianjing_real.png",
-        explode: "assets/images/module2_tianjing_explode.jpg",
+        realImg: "assets/images/tianjing_real.webp",
+        explode: "assets/images/module2_tianjing_explode.webp",
         func: "1. 采光：为封闭院落内部提供自然光照，解决深宅内部阴暗问题。<br>2. 通风：形成空气对流，排出屋内湿气、油烟，改善室内微气候。<br>3. 排水：屋面雨水统一汇入天井，经暗沟排出，实现集中排水。<br>4. 安全：便于火灾时取水、疏散，提升居住安全性。",
         craft: "1. 由正屋、东西厢房、门厅围合而成，多为方形或矩形。<br>2. 地面铺设青石板，四角或中间设石质水漏，连接地下暗沟。<br>3. 四周屋檐向天井内倾斜，保证雨水全部落入天井，即“四水归堂”。<br>4. 大户天井会增设石栏、花坛、水缸，兼具景观功能。",
         culture: "1. “四水归堂”象征肥水不流外人田，聚财、守财。<br>2. 天井为“天地相通”之处，体现天人合一、阴阳调和的风水思想。<br>3. 围合式结构象征家族团聚、宗族向心力强。"
@@ -1588,8 +1754,8 @@
         title: "穿斗式木构架",
         name: "穿斗式木构架",
         real: "module2_mugou_real.jpg",
-        realImg: "assets/images/chuandou_real.png",
-        explode: "assets/images/module2_chuandou_explode.jpg",
+        realImg: "assets/images/chuandou_real.webp",
+        explode: "assets/images/module2_chuandou_explode.webp",
         func: "1. 承重：柱子直接承托檩条，不依赖大梁，受力直接、结构稳定。<br>2. 抗震：整体柔性框架，榫卯连接可缓冲地震冲击，抗震性强。<br>3. 适应气候：用料较细、开间灵活，适合皖南多雨潮湿、多风环境。<br>4. 空间实用：柱网密集，适合普通民居、厢房、廊庑等日常空间。",
         craft: "1. 立柱落地，直接承檩，柱间用“穿枋”横向串联成整体。<br>2. 全部采用榫卯结构，不用铁钉，拆装维修方便。<br>3. 木材多用杉木、松木，轻质且不易变形，防虫防腐处理。<br>4. 檐柱、金柱高度依次变化，形成屋面坡度。",
         culture: "1. 结构细密紧凑，象征家族根基稳固、人丁兴旺。<br>2. 实用节俭的营造方式，体现徽州人务实内敛的性格。"
@@ -1598,8 +1764,8 @@
         title: "抬梁式木构架",
         name: "抬梁式木构架",
         real: "module2_tailiang_real.jpg",
-        realImg: "assets/images/menchuang_real.png",
-        explode: "assets/images/module2_tailiang_explode.png",
+        realImg: "assets/images/menchuang_real.webp",
+        explode: "assets/images/module2_tailiang_explode.webp",
         func: "1. 大空间支撑：通过层层抬梁扩大室内跨度，形成宽敞无柱的厅堂。<br>2. 礼制象征：多用于祠堂、正厅、大堂等重要空间，体现等级与气派。<br>3. 结构庄重：整体刚度大，承重能力强，适合高大宏伟建筑。",
         craft: "1. 柱上放置大梁，梁上立短柱，短柱再承小梁，层层抬升。<br>2. 梁柱粗大厚重，榫卯复杂，部分配以替木、斗拱过渡。<br>3. 多选用质地坚硬的木料，如柏木、楠木、优质杉木。<br>4. 梁枋常做木雕、彩绘，彰显主人身份与财力。",
         culture: "1. 厅堂开阔大气，象征家族地位显赫、财大气粗。<br>2. 规整对称结构，体现儒家礼制秩序、长幼尊卑观念。"
@@ -1608,8 +1774,8 @@
         title: "堂屋",
         name: "堂屋（正厅、中堂）",
         real: "module2_tangwu_real.jpg",
-        realImg: "assets/images/tangwu_real.jpg",
-        explode: "assets/images/module2_tangwu_explode.jpg",
+        realImg: "assets/images/tangwu_real.webp",
+        explode: "assets/images/module2_tangwu_explode.webp",
         func: "1. 礼制核心：祭祀祖先、接待贵宾、举办婚丧嫁娶等重大仪式。<br>2. 家族中心：议事、团聚、家训传承的核心空间。<br>3. 空间秩序：居中对称，体现主次分明、内外有别的居住伦理。",
         craft: "1. 位于建筑群中轴线上，面阔多为三间，明厅最大。<br>2. 后部设太师壁、供奉台，摆放祖先牌位、匾额、条案。<br>3. 前方正对天井，采光最好，地面略高于厢房以示尊贵。<br>4. 门窗、梁架装饰最精美，彰显家族脸面。",
         culture: "1. 尊祖敬宗、忠孝传家，是徽州儒家文化的空间体现。<br>2. 对称规整象征家庭和睦、秩序井然。"
@@ -1618,10 +1784,10 @@
         title: "门窗隔扇",
         name: "门窗隔扇",
         real: "module2_menchuang_real.jpg",
-        realImg: "assets/images/tailiang_real.png",
+        realImg: "assets/images/tailiang_real.webp",
         imageClass: "wide-view",
         alignClass: "shift-left-sm",
-        explode: "assets/images/module2_menchuang_explode.jpg",
+        explode: "assets/images/module2_menchuang_explode.webp",
         func: "1. 采光通风：大面积棂格与可开启扇，兼顾通透与私密。<br>2. 空间分隔：灵活划分室内外、厅堂与厢房。<br>3. 安全防护：细密棂格与坚固木框起到防盗、防护作用。<br>4. 装饰立面：是徽州三雕最重要的展示载体之一。",
         craft: "1. 主体为杉木框架，棂格采用榫卯拼接，样式丰富（冰裂纹、方格、海棠纹等）。<br>2. 大面积使用木雕，题材多为花鸟、人物、吉祥纹样。<br>3. 工艺结合浮雕、透雕、线刻，层次丰富。<br>4. 外部可加装可拆卸的防风板、防雨板。",
         culture: "1. 图案多含吉祥寓意：松鹤延年、麒麟送子、富贵牡丹等。<br>2. 精致雕刻体现“耕读传家”，彰显书香门第气质。"
@@ -1637,6 +1803,9 @@
     const moduleCraft = document.getElementById("moduleCraft");
     const moduleCulture = document.getElementById("moduleCulture");
     const moduleDetail = document.getElementById("moduleDetail");
+    const moduleZoomOverlay = document.getElementById("moduleZoomOverlay");
+    const moduleZoomImage = document.getElementById("moduleZoomImage");
+    const moduleZoomLens = document.getElementById("moduleZoomLens");
 
     function setModule(id) {
       const item = moduleData[id];
@@ -1646,7 +1815,8 @@
       moduleButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.module === id));
       setTimeout(() => {
         if (item.realImg) {
-          moduleRealImg.src = item.realImg;
+          moduleRealImg.dataset.src = item.realImg;
+          loadImgElement(moduleRealImg);
           moduleRealImg.alt = `${item.title}实拍图`;
           moduleRealImg.classList.toggle("wide-view", item.imageClass === "wide-view");
           moduleRealImg.classList.toggle("keep-right", item.alignClass === "keep-right");
@@ -1659,7 +1829,8 @@
           moduleRealImg.style.display = "none";
         }
         if (item.explode) {
-          moduleExplode.innerHTML = `<img src="${item.explode}?v=2" alt="${item.title}拆解图">`;
+          moduleExplode.innerHTML = `<img class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="${item.explode}?v=2" alt="${item.title}拆解图" loading="lazy" decoding="async">`;
+          lazyLoadImagesIn(moduleExplode);
         } else {
           moduleExplode.textContent = "";
         }
@@ -1673,6 +1844,61 @@
 
     moduleButtons.forEach(btn => {
       btn.addEventListener("click", () => setModule(btn.dataset.module));
+    });
+
+    function openModuleZoomPreview(sourceImg) {
+      const previewSrc = sourceImg.dataset.src || sourceImg.currentSrc || sourceImg.src;
+      if (!previewSrc) return;
+      moduleZoomImage.src = previewSrc;
+      moduleZoomOverlay.classList.add("show");
+      moduleZoomOverlay.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModuleZoomPreview() {
+      moduleZoomOverlay.classList.remove("show");
+      moduleZoomOverlay.setAttribute("aria-hidden", "true");
+      moduleZoomLens.style.display = "none";
+      document.body.style.overflow = "";
+    }
+
+    moduleExplode.addEventListener("click", (event) => {
+      const img = event.target.closest("img");
+      if (!img) return;
+      openModuleZoomPreview(img);
+    });
+
+    moduleZoomOverlay.addEventListener("click", (event) => {
+      if (event.target === moduleZoomOverlay) closeModuleZoomPreview();
+    });
+
+    moduleZoomImage.addEventListener("mousemove", (event) => {
+      const rect = moduleZoomImage.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
+        moduleZoomLens.style.display = "none";
+        return;
+      }
+      const rx = x / rect.width;
+      const ry = y / rect.height;
+      const zoomScale = 2.2;
+      moduleZoomLens.style.display = "block";
+      moduleZoomLens.style.left = `${event.clientX + 18}px`;
+      moduleZoomLens.style.top = `${event.clientY + 18}px`;
+      moduleZoomLens.style.backgroundImage = `url("${moduleZoomImage.src}")`;
+      moduleZoomLens.style.backgroundSize = `${rect.width * zoomScale}px ${rect.height * zoomScale}px`;
+      moduleZoomLens.style.backgroundPosition = `${-(rx * rect.width * zoomScale - moduleZoomLens.offsetWidth / 2)}px ${-(ry * rect.height * zoomScale - moduleZoomLens.offsetHeight / 2)}px`;
+    });
+
+    moduleZoomImage.addEventListener("mouseleave", () => {
+      moduleZoomLens.style.display = "none";
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && moduleZoomOverlay.classList.contains("show")) {
+        closeModuleZoomPreview();
+      }
     });
 
     // 默认显示马头墙，避免首次进入时拆解图为空
@@ -1870,6 +2096,19 @@
     });
 
     renderCompare("layout");
+
+    const backToTopBtn = document.getElementById("backToTopBtn");
+    function updateBackToTopVisibility() {
+      const threshold = Math.max(120, (document.documentElement.scrollHeight - window.innerHeight) * 0.25);
+      backToTopBtn.classList.toggle("show", window.scrollY >= threshold);
+    }
+
+    window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
+    window.addEventListener("resize", updateBackToTopVisibility);
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    updateBackToTopVisibility();
 
   </script>
 </body>
