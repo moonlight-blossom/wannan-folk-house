@@ -1580,7 +1580,7 @@
       <div class="compare-grid" id="compareGrid">
         <article class="compare-card" id="cardWannan">
           <h3>皖南民居（安徽徽州）</h3>
-          <div class="compare-photo"><img class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/compare_wannan.webp?v=2" alt="皖南民居示意图" loading="lazy" decoding="async"></div>
+          <div class="compare-photo"><img class="lazy-module-image" id="compareWannanImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/compare_wannan.webp?v=2" alt="皖南民居示意图" loading="lazy" decoding="async"></div>
           <p id="compareWannanText"></p>
           <div class="compare-meta">
             <div><strong>代表：</strong><span id="compareWannanRep"></span></div>
@@ -1589,7 +1589,7 @@
         </article>
         <article class="compare-card" id="cardSiheyuan">
           <h3>北京四合院（华北地区）</h3>
-          <div class="compare-photo tall-photo"><img class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/compare_siheyuan.webp?v=6" alt="北京四合院示意图" loading="lazy" decoding="async"></div>
+          <div class="compare-photo tall-photo"><img class="lazy-module-image" id="compareSiheyuanImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/compare_siheyuan.webp?v=6" alt="北京四合院示意图" loading="lazy" decoding="async"></div>
           <p id="compareSiheyuanText"></p>
           <div class="compare-meta">
             <div><strong>代表：</strong><span id="compareSiheyuanRep"></span></div>
@@ -1598,7 +1598,7 @@
         </article>
         <article class="compare-card" id="cardTulou">
           <h3>福建土楼（客家地区）</h3>
-          <div class="compare-photo tall-photo"><img class="lazy-module-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/compare_tulou.webp?v=6" alt="福建土楼示意图" loading="lazy" decoding="async"></div>
+          <div class="compare-photo tall-photo"><img class="lazy-module-image" id="compareTulouImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/compare_tulou.webp?v=6" alt="福建土楼示意图" loading="lazy" decoding="async"></div>
           <p id="compareTulouText"></p>
           <div class="compare-meta">
             <div><strong>代表：</strong><span id="compareTulouRep"></span></div>
@@ -2116,7 +2116,10 @@
         repF: "承启楼、振成楼、二宜楼、环极楼",
         geoW: "安徽黄山、歙县、黟县、泾县等皖南区域",
         geoB: "北京市区及华北平原地区",
-        geoF: "福建永定、南靖、龙岩等客家山区"
+        geoF: "福建永定、南靖、龙岩等客家山区",
+        wannanImg: "assets/images/compare_wannan.webp?v=2",
+        siheyuanImg: "assets/images/compare_siheyuan.webp?v=6",
+        tulouImg: "assets/images/compare_tulou.webp?v=6"
       },
       space: {
         wannan: "小天井高耸，兼具采光、通风、排水与防潮；厅堂居中，公共与私密空间过渡自然，整体尺度紧凑而不压迫。",
@@ -2129,7 +2132,10 @@
         repF: "大型圆楼与方楼群体",
         geoW: "山地丘陵与水系密布环境",
         geoB: "平原城市与街巷院落环境",
-        geoF: "山区盆地与防御型聚居环境"
+        geoF: "山区盆地与防御型聚居环境",
+        wannanImg: "assets/images/wannan_space.webp?v=1",
+        siheyuanImg: "assets/images/siheyuan_space.webp?v=1",
+        tulouImg: "assets/images/tulou_space.webp?v=1"
       },
       material: {
         wannan: "穿斗式木构为主体、核心厅堂辅以抬梁；砖木混合、小青瓦屋面，榫卯连接精细，重点解决南方潮湿多雨环境下的排水与通风问题。",
@@ -2142,7 +2148,10 @@
         repF: "夯土厚墙与石木复合体系",
         geoW: "南方多雨湿润气候区",
         geoB: "北方寒冷干燥气候区",
-        geoF: "山区湿热多雨且需防御区域"
+        geoF: "山区湿热多雨且需防御区域",
+        wannanImg: "assets/images/wannan_material.webp?v=1",
+        siheyuanImg: "assets/images/siheyuan_material.webp?v=1",
+        tulouImg: "assets/images/tulou_material.webp?v=1"
       },
       function: {
         wannan: "集居住、祭祀、待客、藏书储物于一体；马头墙防火防风，天井调节微气候，兼顾宜居功能与宗族礼仪。",
@@ -2155,7 +2164,10 @@
         repF: "围合防御与共享庭院系统",
         geoW: "商居合一的徽州村镇",
         geoB: "家族院落型城市空间",
-        geoF: "族群抱团的山区聚居点"
+        geoF: "族群抱团的山区聚居点",
+        wannanImg: "assets/images/wannan_function.webp?v=1",
+        siheyuanImg: "assets/images/siheyuan_function.webp?v=1",
+        tulouImg: "assets/images/tulou_function.webp?v=1"
       },
       decor: {
         wannan: "以徽州三雕为核心，题材偏琴棋书画、花鸟山水与忠孝节义，风格文雅克制、书卷气浓厚，细部工艺辨识度高。",
@@ -2168,7 +2180,10 @@
         repF: "门楼与祖堂局部简饰",
         geoW: "徽州三雕传统工艺区",
         geoB: "京城官式建筑审美区",
-        geoF: "客家防御聚居建筑区"
+        geoF: "客家防御聚居建筑区",
+        wannanImg: "assets/images/wannan_decor.webp?v=1",
+        siheyuanImg: "assets/images/siheyuan_decor.webp?v=1",
+        tulouImg: "assets/images/tulou_decor.webp?v=1"
       },
       culture: {
         wannan: "融合徽商文化、程朱理学、宗族制度与风水观，强调耕读传家与贾而好儒，重文脉与家风延续。",
@@ -2181,7 +2196,10 @@
         repF: "客家族群迁徙与防御文化",
         geoW: "皖南徽州文化圈",
         geoB: "京津冀华北礼制文化圈",
-        geoF: "闽西南客家文化圈"
+        geoF: "闽西南客家文化圈",
+        wannanImg: "assets/images/wannan_culture.webp?v=1",
+        siheyuanImg: "assets/images/siheyuan_culture.webp?v=1",
+        tulouImg: "assets/images/tulou_culture.webp?v=1"
       }
     };
 
@@ -2198,6 +2216,9 @@
     const compareWannanGeo = document.getElementById("compareWannanGeo");
     const compareSiheyuanGeo = document.getElementById("compareSiheyuanGeo");
     const compareTulouGeo = document.getElementById("compareTulouGeo");
+    const compareWannanImg = document.getElementById("compareWannanImg");
+    const compareSiheyuanImg = document.getElementById("compareSiheyuanImg");
+    const compareTulouImg = document.getElementById("compareTulouImg");
     const compareCards = Array.from(document.querySelectorAll(".compare-card"));
 
     function renderCompare(dim) {
@@ -2214,6 +2235,21 @@
       compareWannanGeo.textContent = item.geoW;
       compareSiheyuanGeo.textContent = item.geoB;
       compareTulouGeo.textContent = item.geoF;
+      if (compareWannanImg && item.wannanImg) {
+        compareWannanImg.dataset.src = item.wannanImg;
+        compareWannanImg.dataset.loaded = "0";
+        loadImgElement(compareWannanImg);
+      }
+      if (compareSiheyuanImg && item.siheyuanImg) {
+        compareSiheyuanImg.dataset.src = item.siheyuanImg;
+        compareSiheyuanImg.dataset.loaded = "0";
+        loadImgElement(compareSiheyuanImg);
+      }
+      if (compareTulouImg && item.tulouImg) {
+        compareTulouImg.dataset.src = item.tulouImg;
+        compareTulouImg.dataset.loaded = "0";
+        loadImgElement(compareTulouImg);
+      }
     }
 
     function setCompareDim(dim) {
